@@ -39,6 +39,7 @@ class Hand {
             this.cards.push(deck.shift())
         }
         this.inUseCards = []
+        this.selectedCards = []
         this.isFlush = false
         this.isAlmostFlush = false
         this.isStraight = false
@@ -255,12 +256,44 @@ const getWinner = () => {
     }
 }
 
+// const manuallyReplaceCards = (hand) => {
+//     hand = new Hand(hand.selectedCards)
+// }
+
+// const autoReplaceCards = (hand) => {
+//     if (/* certain values */) {
+//         hand = new Hand(hand.inUseCards)
+//     }
+// }
+
+// const finishGame = () => {
+//     autoReplaceCards(computersHand)
+//     // DOM: Deal button appears. Top of screen displays computer's cards. Hand is displayed in text for both computer and player      
+//     if (getWinner() === "win") {
+//         //display "You win!!"
+//     }
+//     if (getWinner() === "loss") {
+//         //display "You lose!!"
+//     }
+// }
+
+// const round = () => {
+//     let playersHand = new Hand ([])
+//     let computersHand = new Hand ([])
+//     // DOM: top of screen displays 5 face down cards (opactity 0 -> 1). *Bottom screen displays the players cards. Deal button disapears. 
+//     //     "Deal cards" and "Keep cards" appear. Info from previous turn such as winner et cetera disapears.
+    
+//     // when user hits keep cards: autoReplaceCards(computersHand)
+//     // when user hits Deal Cards: if (playersHand.selectedCards = []) {alert: "pick some card dude"} else {}
+
+// }
+
+
 
 //  let playersHand = new Hand ([{suit: "S", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 10, name: "H10", sorted: false}, {suit: "S", rank: 9, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
 //  let computersHand = new Hand ([{suit: "H", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 10, name: "H10", sorted: false}, {suit: "S", rank: 9, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
 
-let playersHand = new Hand ([])
-let computersHand = new Hand ([])
+
 
 
 // console.log(playersHand.cards)
@@ -272,6 +305,12 @@ let computersHand = new Hand ([])
 // console.log(playersHand.isAlmostStraight)
 // console.log(playersHand)
 // console.log(computersHand)
+
+//const dealButton = document.getElementById('deal')
+
+
+let playersHand = new Hand ([])
+let computersHand = new Hand ([])
 console.log(playersHand.sortedCards)
 console.log(playersHand.handValue)
 console.log(computersHand.sortedCards)
@@ -285,6 +324,70 @@ console.log(getWinner())
         ultimate tie breaker X
     Complete logic for filling inUseCards, using allMatches X
     Computer AI
+    Psuedocode entire game
+    Create visual layout
+
+
+*/
+
+
+/*
+
+game():
+initial load of page elements
+when user hits "Deal" button: turn()
+
+turn():
+
+1. User hits "Deal" button. 
+    The user receives 5 cards they can see at the bottom of the screen. At the top is five cards face down -- the computer's hand. 
+    User now has the option of two buttons: "Draw cards" or "Keep cards"
+
+    Unseen: create two new Hands
+    DOM: top of screen displays 5 face down cards (opactity 0 -> 1). *Bottom screen displays the players cards. Deal button disapears. 
+        "Deal cards" and "Keep cards" appear. Info from previous turn such as winner et cetera disapears.
+    
+2. Three possibilities here:
+    User hits "Keep Cards". Nothing happens. Proceed to next step.
+    User selects several of the cards by clicking, then clicks "Draw Cards". The cards selected are replaced by new cards. Proceed to next step.
+    User selects no cards but hits "Draw Cards" anyway. An alert is displayed: "Click on the cards you want to discard before clicking 'Draw Cards'". Do not proceed.
+
+    DOM: If "Keep cards", proceed to next step
+        If user clicks "Draw Cards" without selecting cards: alert displayed
+        If user clicks cards: cards move up to show they are selected
+        If user then clicks "Draw Cards": playersHand = new Hand(playersHand.selectedCards. *Bottom screen displays the players cards. proceed to next step
+    "Deal cards" and "Keep cards" disappear.
+        
+
+3.  Here the computer replaces cards. There is some kind of visual or textual indication how many cards are being drawn. 
+    The computer will decide how many/which cards to replace by a deterministic algorythm based on the hand they currently have. A rough idea of how that'd work:
+        For Straight Flush, Flush, Straight, Full House: replace 0
+        For Four of a Kind and Two Pair: replace 1 
+        For Three of a Kind: replace 2 
+        For Pair: replace 3
+        For No Hand: replace 3 lowest cards
+
+        computerDraws()
+
+4. The computer's cards are revealed. The hand (e.g. Full House, Two Pair) is declared in text for both the user and the computer. 
+    Text displays "You win!" or "You lose!" 
+    User has the option of a "Deal" button 
+    Cards are returned to the deck and deck reshuffled
+
+    getWinner()
+    DOM: winner element displays "You win!" or "You lose!" Top of screen displays computer's cards. Hand is displayed in text for both computer and player
+            Deal button appears. 
+
+Organisation of page:
+
+            LEFT                                                CENTERED                                        RIGHT
+Top third   "Dealer's Hand" [computerHand.handValueName]        Computer's cards                                (options panel)
+
+Center third Winner messege                                     pereptually face down "deck" card               Deal button
+
+Bottom third "Your Hand" [playersHand.handValueName]            Player's cards                                  "Draw cards"/"Hold Cards" buttons
+
+DOM elements needed:
 
 
 */
