@@ -9,6 +9,9 @@
 </head>
 <body>
     <div id="container">
+        <header>
+            <h1>someone or something which pokes</h1>
+        </header>
         <div class="row" id="top-row">
             <div class="hand-holder">
                 <h2>Dealer's Hand</h2>
@@ -16,25 +19,28 @@
             </div>
             <ul>
                 <li>
-                    <img class="computer-card"></img>
+                    <img class="computer-card" id="cc0"></img>
                 </li>
                 <li>
-                    <img class="computer-card"></img>
+                    <img class="computer-card" id="cc1"></img>
                 </li>
                 <li>
-                    <img class="computer-card"></img>
+                    <img class="computer-card" id="cc2"></img>
                 </li>
                 <li>
-                    <img class="computer-card"></img>
+                    <img class="computer-card" id="cc3"></img>
                 </li>
                 <li>
-                    <img class="computer-card"></img>
+                    <img class="computer-card" id="cc4"></img>
                 </li>
             </ul>
+            <div id="options-panel">
+                <p>placeholder text lol</p>
+            </div>
         </div>
         <div class="row" id="middle-row">
             <h2>winner text!</h2>
-            <img class="deck-card"></img>
+            <img class="deck-card" src="./assets/images/cards/backs/blue.svg"></img>
             <div class="button-holder">
                 <button id="deal">Deal!</button>
             </div>
@@ -46,24 +52,24 @@
             </div>
             <ul>
                 <li>
-                    <img class="player-card"></img>
+                    <img class="player-card" id="pc0"></img>
                 </li>
                 <li>
-                    <img class="player-card"></img>
+                    <img class="player-card" id="pc1"></img>
                 </li>
                 <li>
-                    <img class="player-card"></img>
+                    <img class="player-card" id="pc2"></img>
                 </li>
                 <li>
-                    <img class="player-card"></img>
+                    <img class="player-card" id="pc3"></img>
                 </li>
                 <li>
-                    <img class="player-card"></img>
+                    <img class="player-card" id="pc4"></img>
                 </li>
             </ul>
             <div class="button-holder">
-                <button class="draw-option">Draw Cards</button>
-                <button class="draw-option">Hold Cards</button>
+                <button class="draw-option" id="draw-cards">Draw Cards</button>
+                <button class="draw-option" id="hold-cards">Hold Cards</button>
             </div>
         </div>
     </div>

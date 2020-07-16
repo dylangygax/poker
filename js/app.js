@@ -2,14 +2,15 @@
 
 // DECK
 
-deck = []
+
 getDeck = () => {
+    deck = []
     //construct 52 cards
     for (i = 2; i <= 14; i++) {
-        deck.push({suit: "S", rank: i, name: "S" + i, sorted: false})
-        deck.push({suit: "H", rank: i, name: "H" + i, sorted: false})
-        deck.push({suit: "D", rank: i, name: "D" + i, sorted: false})
-        deck.push({suit: "C", rank: i, name: "C" + i, sorted: false})
+        deck.push({suit: "S", rank: i, name: "spades/" + i + ".svg", sorted: false, selected: false})
+        deck.push({suit: "H", rank: i, name: "hearts/" + i + ".svg", sorted: false, selected: false})
+        deck.push({suit: "D", rank: i, name: "diamonds/" + i + ".svg", sorted: false, selected: false})
+        deck.push({suit: "C", rank: i, name: "clubs/" + i + ".svg", sorted: false, selected: false})
     }
     //randomise deck
     shuffledDeck = []
@@ -25,7 +26,7 @@ getDeck = () => {
         }
         deck = shuffledDeck
 }
-getDeck()
+//getDeck()
 //console.log(deck)
 
 // HAND
@@ -38,6 +39,7 @@ class Hand {
         for (i = 1; i <= this.numberOfCardsNeeded; i++) {
             this.cards.push(deck.shift())
         }
+        //console.log(this.cards)
         this.inUseCards = []
         this.selectedCards = []
         this.isFlush = false
@@ -75,10 +77,10 @@ class Hand {
         // Sort Cards
         this.sortedRanks = []
         for (i = 0; i < cards.length; i++) {
+            this.cards[i].sorted = false
             this.sortedRanks.push(cards[i].rank)
         }
         this.sortedRanks.sort((a,b)=>b-a)
-        //this.cards = this.cards // not sure if this temporary array is neccessary now that I have the sorted boolean for cards
         this.sortedCards = []
         for (i = 0; i < this.sortedRanks.length; i++) {
             for (let j = 0; j < 5; j++) {
@@ -89,10 +91,11 @@ class Hand {
                 }
             }
         }
+        // console.log(this.sortedCards)
         // Straight Check
         this.straightCounter = 0
         for (i = 0; i <= 3; i++) {
-            if (this.sortedCards[i].rank === this.sortedCards[i + 1].rank + 1) {
+            if (this.sortedCards[i].rank === this.sortedCards[i + 1].rank + 1) { // ERROR HERE
                 this.straightCounter += 1
             }
         }
@@ -211,6 +214,11 @@ class Hand {
             this.handValue = 1
         }
         
+        console.log(this.sortedCards)
+        // fill in Use cards with highest two cards if there's no hand or almost hand
+        if (this.handValue === 0 && this.inUseCards.length === 0) {
+            this.inUseCards = [this.sortedCards[0], this.sortedCards[1]]
+        }
     }
     // fillCards(){
         
@@ -242,17 +250,18 @@ const getWinner = () => {
                     return "loss"
                 }
             }
-        } else {
-            for (i = 0; i < 5; i++) { // Highest card wins
-                if (playersHand.sortedCards[i].rank > computersHand.sortedCards[i].rank) {
-                    return "win"
-                } else if (playersHand.sortedCards[i].rank < computersHand.sortedCards[i].rank) {
-                    return "loss"
-                }
-                console.log(i + " checked")
+        } 
+        // Highest card wins
+        for (i = 0; i < 5; i++) { 
+            if (playersHand.sortedCards[i].rank > computersHand.sortedCards[i].rank) {
+                return "win"
+            } else if (playersHand.sortedCards[i].rank < computersHand.sortedCards[i].rank) {
+                return "loss"
             }
-            return "win"//this is the case where both players have the exact same value cards. I give the tie breaker to the player. Seems like a nice thing to do. In practice this will really never run
+            console.log(i + " checked")            
         }
+        return "win"//this is the case where both players have the exact same value cards. I give the tie breaker to the player. Seems like a nice thing to do. In practice this will really never run
+
     }
 }
 
@@ -260,22 +269,6 @@ const getWinner = () => {
 //     hand = new Hand(hand.selectedCards)
 // }
 
-// const autoReplaceCards = (hand) => {
-//     if (/* certain values */) {
-//         hand = new Hand(hand.inUseCards)
-//     }
-// }
-
-// const finishGame = () => {
-//     autoReplaceCards(computersHand)
-//     // DOM: Deal button appears. Top of screen displays computer's cards. Hand is displayed in text for both computer and player      
-//     if (getWinner() === "win") {
-//         //display "You win!!"
-//     }
-//     if (getWinner() === "loss") {
-//         //display "You lose!!"
-//     }
-// }
 
 // const round = () => {
 //     let playersHand = new Hand ([])
@@ -291,31 +284,157 @@ const getWinner = () => {
 
 
 //  let playersHand = new Hand ([{suit: "S", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 10, name: "H10", sorted: false}, {suit: "S", rank: 9, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
-//  let computersHand = new Hand ([{suit: "H", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 10, name: "H10", sorted: false}, {suit: "S", rank: 9, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
+// let computersHand = new Hand ([{suit: "H", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 13, name: "H10", sorted: false}, {suit: "S", rank: 11, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
 
 
+let playersHand = {}
+let computersHand = {}
+
+const showPlayersCards = () => {
+    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.cards[0].name)
+    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.cards[1].name)
+    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.cards[2].name)
+    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.cards[3].name)
+    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
+}
+
+const showComputerCards = () => {
+    computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.cards[0].name)
+    computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.cards[1].name)
+    computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.cards[2].name)
+    computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.cards[3].name)
+    computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.cards[4].name)
+}
+
+const showBacksOfComputerCards = () => {
+    computerCard0.setAttribute('src', 'assets/images/cards/backs/blue.svg')
+    computerCard1.setAttribute('src', 'assets/images/cards/backs/blue.svg')
+    computerCard2.setAttribute('src', 'assets/images/cards/backs/blue.svg')
+    computerCard3.setAttribute('src', 'assets/images/cards/backs/blue.svg')
+    computerCard4.setAttribute('src', 'assets/images/cards/backs/blue.svg')
+}
+
+const deal = () => {
+    getDeck()
+    playersHand = new Hand ([])
+    computersHand = new Hand ([])
+    console.log(playersHand.sortedCards)
+    console.log(playersHand.handValue)
+    console.log(computersHand.sortedCards)
+    console.log(computersHand.handValue)
+    console.log(computersHand.inUseCards)
+    console.log(getWinner())
+    // DOM: top of screen displays 5 face down cards (opactity 0 -> 1). 
+    // Bottom screen displays the players cards. Deal button disapears. 
+    showPlayersCards()
+    showBacksOfComputerCards()
+    //     "Deal cards" and "Keep cards" appear. Info from previous turn such as winner et cetera disapears.
+}
+
+const autoReplaceCards = () => {
+    if (computersHand.handValue === 7 || computersHand.handValue <= 3) {
+        computersHand = new Hand(computersHand.inUseCards)
+    }
+    console.log("replace haha")
+    console.log(computersHand.sortedCards)
+    console.log(computersHand.handValue)
+}
+
+const manuallyReplaceCards = () => {
+    for (i = 0; i < 5; i++) {
+        if (playersHand.cards[i].selected === true) {
+            playersHand.selectedCards.push(playersHand.cards[i])
+        }
+    }
+    playersHand = new Hand(playersHand.selectedCards)
+}
 
 
-// console.log(playersHand.cards)
-// console.log(playersHand.cards)
-// console.log(playersHand.sortedRanks)
+const finishRound = () => {
+    autoReplaceCards()
+    // DOM: Deal button appears. Top of screen displays computer's cards. Hand is displayed in text for both computer and player      
+    showComputerCards()
+    if (getWinner() === "win") {
+        //display "You win!!"
+        console.log("YOU WIN!!")
+    }
+    if (getWinner() === "loss") {
+        //display "You lose!!"
+        console.log("YOU LOSE!!")
+    }
+}
+
+// Deal Button
+// const dealButton = document.getElementById('deal')
+const dealButton = document.querySelector('.deck-card')
+dealButton.addEventListener('click', function(){
+    console.log("yeet")
+    deal()
+})
+
+// Hold Cards Button
+const holdCardButton = document.getElementById('hold-cards')
+holdCardButton.addEventListener('click', function(){
+    //console.log("yeet 2049")
+    finishRound()
+})
+
+// Draw Cards Button
+
+const drawCardButton = document.getElementById('draw-cards')
+drawCardButton.addEventListener('click', function(){
+    //console.log("yeet 2049")
+    manuallyReplaceCards()
+    showPlayersCards()
+    finishRound()
+})
+
+// Player Cards
+const playerCard0 = document.getElementById('pc0')
+const playerCard1 = document.getElementById('pc1')
+const playerCard2 = document.getElementById('pc2')
+const playerCard3 = document.getElementById('pc3')
+const playerCard4 = document.getElementById('pc4')
+
+// Player Cards - functionality
+playerCard0.addEventListener('click', function(){
+    playersHand.cards[0].selected = !(playersHand.cards[0].selected)
+    console.log(playersHand.cards[0].selected)
+    //playerCard0.setAttribute('class', '.red-border')
+})
+playerCard1.addEventListener('click', function(){
+    playersHand.cards[1].selected = !(playersHand.cards[1].selected)
+    console.log(playersHand.cards[1].selected)
+})
+playerCard2.addEventListener('click', function(){
+    playersHand.cards[2].selected = !(playersHand.cards[2].selected)
+    console.log(playersHand.cards[2].selected)
+})
+playerCard3.addEventListener('click', function(){
+    playersHand.cards[3].selected = !(playersHand.cards[3].selected)
+    console.log(playersHand.cards[3].selected)
+})
+playerCard4.addEventListener('click', function(){
+    playersHand.cards[4].selected = !(playersHand.cards[4].selected)
+    console.log(playersHand.cards[4].selected)
+})
+
+// Computer Cards
+
+const computerCard0 = document.getElementById('cc0')
+const computerCard1 = document.getElementById('cc1')
+const computerCard2 = document.getElementById('cc2')
+const computerCard3 = document.getElementById('cc3')
+const computerCard4 = document.getElementById('cc4')
+
+// let playersHand = new Hand ([])
+// let computersHand = new Hand ([])
 // console.log(playersHand.sortedCards)
-// console.log(playersHand.straightCounter)
-// console.log(playersHand.isStraight)
-// console.log(playersHand.isAlmostStraight)
-// console.log(playersHand)
-// console.log(computersHand)
-
-//const dealButton = document.getElementById('deal')
-
-
-let playersHand = new Hand ([])
-let computersHand = new Hand ([])
-console.log(playersHand.sortedCards)
-console.log(playersHand.handValue)
-console.log(computersHand.sortedCards)
-console.log(computersHand.handValue)
-console.log(getWinner())
+// console.log(playersHand.handValue)
+// console.log(computersHand.sortedCards)
+// console.log(computersHand.handValue)
+// console.log(computersHand.inUseCards)
+// console.log(getWinner())
 
 
 /* TO DO
