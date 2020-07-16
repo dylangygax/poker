@@ -72,7 +72,7 @@ Nice-To-Haves and stretch goals beyond MVP (in roughly the order I would pursue 
 
 Wireframe
 
-![Wireframe](https://wireframe.cc/KbyP04)
+![Wireframe](./images/wireframe_poker.png)
 
 
 

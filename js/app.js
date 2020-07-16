@@ -180,55 +180,58 @@ class Hand {
 
         
         //Value of Hand
-        this.handValue = 0
+        this.handValue = {value: 0, name: "High Card"}
         // 8 Straight Flush. 
         if (this.isFlush && this.isStraight) {
-            this.handValue = 8 
+            this.handValue = {value: 8, name: "Straight Flush!!!"} 
         }
         // 7 Four of a kind. (PICK)
         else if (this.isFourOfAKind) {
-            this.handValue = 7
+            this.handValue = {value: 7, name: "Four of a Kind!"} 
         }
         // 6 Full house 
         else if (this.isFullHouse) {
-            this.handValue = 6
+            this.handValue = {value: 6, name: "Full House!"}
         }
         // 5 Flush 
         else if (this.isFlush) {
-            this.handValue = 5 
+            this.handValue = {value: 5, name: "Flush"}
         }
         // 4 Straight 
         else if (this.isStraight) {
-            this.handValue = 4
+            this.handValue = {value: 4, name: "Straight"}
         }
         // 3 Three of a kind (PICK)
         else if (this.isThreeOfAKind) {
-            this.handValue = 3
+            this.handValue = {value: 3, name: "Three of a Kind"}
         }
         // 2 Two pair (PICK)
         else if (this.isTwoPair) {
-            this.handValue = 2
+            this.handValue = {value: 2, name: "Two Pair"}
         }
         // 1 One Pair (PICK)
         else if (this.isPair) {
-            this.handValue = 1
+            this.handValue = {value: 1, name: "Pair"}
         }
         
         console.log(this.sortedCards)
         // fill in Use cards with highest two cards if there's no hand or almost hand
-        if (this.handValue === 0 && this.inUseCards.length === 0) {
+        if (this.handValue.value === 0 && this.inUseCards.length === 0) {
             this.inUseCards = [this.sortedCards[0], this.sortedCards[1]]
         }
+        this.organizedCards = this.inUseCards 
+        for (i = 0; i < 5; i++){
+            if (!this.organizedCards.includes(this.sortedCards[i])) {
+                this.organizedCards.push(this.sortedCards[i])
+            }
+        }
     }
-    // fillCards(){
-        
-    // }
 }
 
 const getWinner = () => {
-    if (playersHand.handValue > computersHand.handValue) {
+    if (playersHand.handValue.value > computersHand.handValue.value) {
         return "win"
-    } else if (playersHand.handValue < computersHand.handValue) {
+    } else if (playersHand.handValue.value < computersHand.handValue.value) {
         return "loss"
     } else { // Tie breakers
         if (playersHand.allMatches.length === 1) { // Four of a Kind, Three of a Kind, Pair
@@ -298,12 +301,20 @@ const showPlayersCards = () => {
     playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
 }
 
+const showPlayersCardsAtEnd = () => {
+    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[0].name)
+    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[1].name)
+    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
+    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
+    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
+}
+
 const showComputerCards = () => {
-    computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.cards[0].name)
-    computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.cards[1].name)
-    computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.cards[2].name)
-    computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.cards[3].name)
-    computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.cards[4].name)
+    computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[0].name)
+    computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[1].name)
+    computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[2].name)
+    computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[3].name)
+    computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[4].name)
 }
 
 const showBacksOfComputerCards = () => {
@@ -329,10 +340,13 @@ const deal = () => {
     showPlayersCards()
     showBacksOfComputerCards()
     //     "Deal cards" and "Keep cards" appear. Info from previous turn such as winner et cetera disapears.
+    winnerText.innerText = ""
+    playersHandText.innerText = ""
+    computersHandText.innerText = ""
 }
 
 const autoReplaceCards = () => {
-    if (computersHand.handValue === 7 || computersHand.handValue <= 3) {
+    if (computersHand.handValue.value === 7 || computersHand.handValue.value <= 3) {
         computersHand = new Hand(computersHand.inUseCards)
     }
     console.log("replace haha")
@@ -340,9 +354,18 @@ const autoReplaceCards = () => {
     console.log(computersHand.handValue)
 }
 
-const manuallyReplaceCards = () => {
+const checkSelected = () => {
     for (i = 0; i < 5; i++) {
         if (playersHand.cards[i].selected === true) {
+            return true
+        }
+    }
+    return false
+}
+
+const manuallyReplaceCards = () => {
+    for (i = 0; i < 5; i++) {
+        if (playersHand.cards[i].selected === false) {
             playersHand.selectedCards.push(playersHand.cards[i])
         }
     }
@@ -353,13 +376,23 @@ const manuallyReplaceCards = () => {
 const finishRound = () => {
     autoReplaceCards()
     // DOM: Deal button appears. Top of screen displays computer's cards. Hand is displayed in text for both computer and player      
+    // getWinner()
+    playersHandText.innerText = playersHand.handValue.name
+    console.log(playersHand.handValue.name)
+    computersHandText.innerText = computersHand.handValue.name
     showComputerCards()
+    showPlayersCardsAtEnd()
+    playerCard0.classList.remove('selected-card')
+    playerCard1.classList.remove('selected-card')
+    playerCard2.classList.remove('selected-card')
+    playerCard3.classList.remove('selected-card')
+    playerCard4.classList.remove('selected-card')
     if (getWinner() === "win") {
-        //display "You win!!"
+        winnerText.innerText = "You win!!"
         console.log("YOU WIN!!")
     }
     if (getWinner() === "loss") {
-        //display "You lose!!"
+        winnerText.innerText = "You lose!!"
         console.log("YOU LOSE!!")
     }
 }
@@ -380,13 +413,15 @@ holdCardButton.addEventListener('click', function(){
 })
 
 // Draw Cards Button
-
 const drawCardButton = document.getElementById('draw-cards')
 drawCardButton.addEventListener('click', function(){
     //console.log("yeet 2049")
-    manuallyReplaceCards()
-    showPlayersCards()
-    finishRound()
+    if (checkSelected()) {
+        manuallyReplaceCards()
+        finishRound()
+    } else {
+        alert("pick some cards to discard, you damned fool!")
+    }
 })
 
 // Player Cards
@@ -399,23 +434,27 @@ const playerCard4 = document.getElementById('pc4')
 // Player Cards - functionality
 playerCard0.addEventListener('click', function(){
     playersHand.cards[0].selected = !(playersHand.cards[0].selected)
+    playerCard0.classList.toggle('selected-card')
     console.log(playersHand.cards[0].selected)
-    //playerCard0.setAttribute('class', '.red-border')
 })
 playerCard1.addEventListener('click', function(){
     playersHand.cards[1].selected = !(playersHand.cards[1].selected)
+    playerCard1.classList.toggle('selected-card')
     console.log(playersHand.cards[1].selected)
 })
 playerCard2.addEventListener('click', function(){
     playersHand.cards[2].selected = !(playersHand.cards[2].selected)
+    playerCard2.classList.toggle('selected-card')
     console.log(playersHand.cards[2].selected)
 })
 playerCard3.addEventListener('click', function(){
     playersHand.cards[3].selected = !(playersHand.cards[3].selected)
+    playerCard3.classList.toggle('selected-card')
     console.log(playersHand.cards[3].selected)
 })
 playerCard4.addEventListener('click', function(){
     playersHand.cards[4].selected = !(playersHand.cards[4].selected)
+    playerCard4.classList.toggle('selected-card')
     console.log(playersHand.cards[4].selected)
 })
 
@@ -426,6 +465,15 @@ const computerCard1 = document.getElementById('cc1')
 const computerCard2 = document.getElementById('cc2')
 const computerCard3 = document.getElementById('cc3')
 const computerCard4 = document.getElementById('cc4')
+
+// Winner text
+const winnerText = document.getElementById('winner-text')
+
+// Player's hand value
+const playersHandText = document.getElementById('players-hand-value')
+
+// Computer's Hand value
+const computersHandText = document.getElementById('computers-hand-value')
 
 // let playersHand = new Hand ([])
 // let computersHand = new Hand ([])
@@ -442,9 +490,11 @@ const computerCard4 = document.getElementById('cc4')
         make sure that Full house and two pair are correctly ordered X
         ultimate tie breaker X
     Complete logic for filling inUseCards, using allMatches X
-    Computer AI
-    Psuedocode entire game
-    Create visual layout
+    Computer AI X
+    Psuedocode entire game X
+    Create visual layout X
+    Create hand type Objects
+    innertext for displaying hands and winner
 
 
 */

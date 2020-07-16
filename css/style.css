@@ -2,10 +2,16 @@ h1 {
     color: palevioletred;
 }
 
+body {
+    margin: 0
+}
+
 #container {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: lightgreen;
+    margin: 0
 }
 
 header {
@@ -29,12 +35,31 @@ header {
     height: 120px;
     margin: 10px;
     border: 2px solid black;
+    border-radius: 10%;
+    background-color: white;
 } 
 
-.red-border {
-    height: 120px;
+.player-card {
+    transition: all 0.2s ease-in-out;
+}
+
+.selected-card {
+    transform: translateY(-60px);
+    transition: all 0.2s ease-in-out;
+}
+
+.draw-option {
+    width: 100px;
+    height: 50px;
+    background-color: violet;
+    color: navy;
     margin: 10px;
-    border: 2px solid red;
+    border: 1px solid black;
+    border-radius: 10%;
+}
+
+#winner-text {
+    font-size: 60px;
 }
 
 /*#bottom-row*/ ul {
