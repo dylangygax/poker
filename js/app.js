@@ -1,7 +1,12 @@
 // POKER
 
-// DECK
+// CHIPS
 
+let chips = 1000
+let wager = 0
+let pot = 0
+
+// DECK
 
 getDeck = () => {
     deck = []
@@ -35,9 +40,9 @@ class Hand {
     constructor(cards){
         this.cards = cards;
         this.numberOfCardsNeeded = 5 - this.cards.length;
-        //this.cards.push(deck.slice(0 , this.numberOfCardsNeeded));
         for (i = 1; i <= this.numberOfCardsNeeded; i++) {
             this.cards.push(deck.shift())
+            //debugger;
         }
         //console.log(this.cards)
         this.inUseCards = []
@@ -52,8 +57,7 @@ class Hand {
         this.isThreeOfAKind = false
         this.isTwoPair = false
         this.isPair = false
-        // console.log("pizza")
-        // Flush 2.0 
+        // Flush
         this.suitCounter = [[], [], [], []] // S H D C
         for (i = 0; i <= 4; i++) { // iterates over cards to count suits
             if (this.cards[i].suit === "S") {
@@ -140,6 +144,7 @@ class Hand {
                 this.matchesArray = []
                 this.inMatch = false
             }
+            console.log(this.inUseCards)
         }
         // If matchesArray still has a little left (case where the lowest card is part of a pair, three of a kind et cetera)
         if (this.matchesArray.length > 0) {
@@ -213,18 +218,43 @@ class Hand {
         else if (this.isPair) {
             this.handValue = {value: 1, name: "Pair"}
         }
-        
+        // Creating a more specific display name for handValue basedo n the highest card
+        if (this.handValue.value === 0) {
+            if (this.sortedCards[0].rank <= 10) {
+                this.handValue.name = this.sortedCards[0].rank + " High"
+            }
+            if (this.sortedCards[0].rank === 11) {
+                this.handValue.name = "Jack High"
+            }
+            if (this.sortedCards[0].rank === 12) {
+                this.handValue.name = "Queen High"
+            }
+            if (this.sortedCards[0].rank === 13) {
+                this.handValue.name = "King High"
+            }
+            if (this.sortedCards[0].rank === 14) {
+                this.handValue.name = "Ace High"
+            }
+        }
+
+
         console.log(this.sortedCards)
         // fill in Use cards with highest two cards if there's no hand or almost hand
         if (this.handValue.value === 0 && this.inUseCards.length === 0) {
             this.inUseCards = [this.sortedCards[0], this.sortedCards[1]]
         }
-        this.organizedCards = this.inUseCards 
+
+        // Organized Cards: for displaying what player and computer has at the end of each round. 
+        // console.log(this.inUseCards)
+        this.organizedCards = [...this.inUseCards]
+        // console.log("weird line")
+        // console.log(this.inUseCards)
         for (i = 0; i < 5; i++){
             if (!this.organizedCards.includes(this.sortedCards[i])) {
                 this.organizedCards.push(this.sortedCards[i])
             }
         }
+        // console.log(this.inUseCards)
     }
 }
 
@@ -339,10 +369,11 @@ const deal = () => {
     // Bottom screen displays the players cards. Deal button disapears. 
     showPlayersCards()
     showBacksOfComputerCards()
-    //     "Deal cards" and "Keep cards" appear. Info from previous turn such as winner et cetera disapears.
+    //     "Deal cards" and "Keep cards" appear. 
     winnerText.innerText = ""
     playersHandText.innerText = ""
     computersHandText.innerText = ""
+    helpfulText.innerText = ""
 }
 
 const autoReplaceCards = () => {
@@ -354,7 +385,19 @@ const autoReplaceCards = () => {
     console.log(computersHand.handValue)
 }
 
+const getRaise = () => {
+    let raise = computersHand.handValue.value + 3
+    console.log(raise)
+    raise = raise + Math.floor(Math.random() * 5)
+    console.log(raise)
+    raise = Math.max(Math.min(raise, 10), 0)
+    console.log(raise)
+    raise = Math.floor(raise * chips * .1)
+    console.log(raise)
+}
+
 const checkSelected = () => {
+    console.log(playersHand.cards)
     for (i = 0; i < 5; i++) {
         if (playersHand.cards[i].selected === true) {
             return true
@@ -372,14 +415,31 @@ const manuallyReplaceCards = () => {
     playersHand = new Hand(playersHand.selectedCards)
 }
 
+const getWager = () => {
+    if (0 < parseInt(document.getElementById('wager-box').value) && parseInt(document.getElementById('wager-box').value) <= chips) {
+        wager = document.getElementById('wager-box').value
+        console.log(wager)
+        pot = parseInt(wager) * 2
+        console.log(pot)
+        chips = chips - parseInt(wager)
+        console.log(chips)
+        chipsCounter.innerText = "Chips: " + chips
+        return true
+    } else {
+        alert("wager must be greater than zero and less than chips")
+        return false
+    }
+}
 
 const finishRound = () => {
     autoReplaceCards()
+    getRaise()
     // DOM: Deal button appears. Top of screen displays computer's cards. Hand is displayed in text for both computer and player      
     // getWinner()
     playersHandText.innerText = playersHand.handValue.name
     console.log(playersHand.handValue.name)
     computersHandText.innerText = computersHand.handValue.name
+    helpfulText.innerText = 'Click the deck to deal another hand!'
     showComputerCards()
     showPlayersCardsAtEnd()
     playerCard0.classList.remove('selected-card')
@@ -390,12 +450,17 @@ const finishRound = () => {
     if (getWinner() === "win") {
         winnerText.innerText = "You win!!"
         console.log("YOU WIN!!")
+        chips = chips + pot
     }
     if (getWinner() === "loss") {
         winnerText.innerText = "You lose!!"
         console.log("YOU LOSE!!")
     }
+    chipsCounter.innerText = "Chips: " + chips
 }
+
+// Wager Box
+const wagerBox = document.getElementById('wager-box')
 
 // Deal Button
 // const dealButton = document.getElementById('deal')
@@ -409,6 +474,15 @@ dealButton.addEventListener('click', function(){
 const holdCardButton = document.getElementById('hold-cards')
 holdCardButton.addEventListener('click', function(){
     //console.log("yeet 2049")
+    //getWager()
+    if (getWager() === true) {
+        finishRound()
+    }
+})
+
+// Fold button
+const foldButton = document.getElementById('fold')
+foldButton.addEventListener('click', function(){
     finishRound()
 })
 
@@ -417,12 +491,18 @@ const drawCardButton = document.getElementById('draw-cards')
 drawCardButton.addEventListener('click', function(){
     //console.log("yeet 2049")
     if (checkSelected()) {
-        manuallyReplaceCards()
-        finishRound()
+        if (getWager() === true) {
+            manuallyReplaceCards()
+            finishRound()
+        }
     } else {
         alert("pick some cards to discard, you damned fool!")
     }
 })
+
+// Chips counter
+
+const chipsCounter = document.getElementById('chips-counter')
 
 // Player Cards
 const playerCard0 = document.getElementById('pc0')
@@ -474,6 +554,9 @@ const playersHandText = document.getElementById('players-hand-value')
 
 // Computer's Hand value
 const computersHandText = document.getElementById('computers-hand-value')
+
+// Helpful text
+const helpfulText = document.getElementById('helpful-text')
 
 // let playersHand = new Hand ([])
 // let computersHand = new Hand ([])
@@ -559,4 +642,30 @@ Bottom third "Your Hand" [playersHand.handValueName]            Player's cards  
 DOM elements needed:
 
 
+
+TO DO Thursday Afternoon:
+1. fix wager input so it only takes allowable values. alerts for when an improper value is taken X
+2. restructure flow of functions to allow for two smooth rounds of betting
+3. find penguins background and backs of cards image
+4. further work on updating the appearance of the page as something dynamic that always makes sense at that particular moment
+5. create appearance menus for light and dark mode
+6. create system of awards with new back grounds unlocked at each new level. levels might be Oceanic 3000, New Zealand 6000, Galapogas 20000, Lunar 100000
+
+
+
+global variables
+classes/objects
+functions
+loose DOM event listeners 
+
+TO DO Thursday night:
+    reorganize code according to the list above this to do list. look to clean things up and use ... where needed
+    impliment calling or not of computer's wager, and use of hidden class
+    IF FIRST TWO AREN'T DONE IN THE MORNING, START HERE ANYWAY:
+    Penguins! penguin background and penguin backs for the cards
+    create options menu and menus for sound and background (with two themes)
+    unlocking system 
+
+
+HIDDEN CLASS, DISPLAY: NONE
 */

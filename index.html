@@ -35,20 +35,20 @@
                 </li>
             </ul>
             <div id="options-panel">
-                <p>placeholder text lol</p>
+                <p id='chips-counter'>Chips: 1000</p>
             </div>
         </div>
         <div class="row" id="middle-row">
             <h2 id="winner-text"></h2>
             <img class="deck-card" src="./assets/images/cards/backs/blue.svg"></img>
-            <div class="button-holder">
-            </div>
+            <h2 id="helpful-text">Click the deck to begin!</h2>
         </div>
         <div class="row" id="bottom-row">
             <div class="hand-holder">
                 <h2>Your Hand</h2>
                 <h2 id="players-hand-value"></h2>
             </div>
+            <div id="players-cards">
             <ul>
                 <li>
                     <img class="player-card" id="pc0"></img>
@@ -66,9 +66,12 @@
                     <img class="player-card" id="pc4"></img>
                 </li>
             </ul>
+            </div>
             <div class="button-holder">
+                <input type="text" placeholder="What's yr wager?" id="wager-box">
                 <button class="draw-option" id="draw-cards">Draw Cards</button>
                 <button class="draw-option" id="hold-cards">Hold Cards</button>
+                <button class="draw-option" id="fold">Fold</button>
             </div>
         </div>
     </div>
