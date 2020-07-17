@@ -1,4 +1,6 @@
-// POKER
+////////////////////////////////////////// PENGUIN POKER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+////////////////////////// GLOBAL VARIABLES, CLASSES, AND OBJECTS
 
 // CHIPS
 
@@ -6,6 +8,20 @@ let chips = 1000
 let wager = 0
 let raise = 0
 let pot = 0
+
+// LEVEL
+
+let level = {number: 1, minChips: 100, name: 'Antarctica', upMessage: "Welcome back to Antarctica", downMessage: "Welcome back to Antarctica"}
+let nextLevel = {number: 2, minChips: 3000, name: 'Ocean', upMessage: "Congrats on tripling your chips! Enjoy a cool, relaxing swim in the Ocean", downMessage: "Going for another swim? Try to waddle back to dry land."}
+const levelSystem = [
+    {number: 0, minChips: 0, name: 'bust', upMessage: "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table. Were you in hell?", downMessage: "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table."},
+    {number: 1, minChips: 100, name: 'Antarctica', upMessage: "Welcome back to Antarctica. Were you in hell?", downMessage: "Welcome back to Antarctica"},
+    {number: 2, minChips: 3000, name: 'Ocean', upMessage: "Congrats on tripling your chips! Enjoy a cool, relaxing swim in the Ocean", downMessage: "Going for another swim? Try to waddle back to dry land."},
+    {number: 3, minChips: 10000, name: 'New Zealand', upMessage: "Welcome to New Zealand! Home to cute little blue penguins", downMessage: "You're back in New Zealand. Those penguins are cute, but you have mroe to explore"},
+    {number: 4, minChips: 25000, name: 'Chile', upMessage: "welcome to Chile", downMessage: "welcome BACK to Chile"},
+    {number: 5, minChips: 100000, name: 'Galapagos', upMessage: "welcome to the Galapagos", downMessage: "welcome BACK to the Galapagos"},
+    {number: 6, minChips: 1000000, name: 'Lunar',  upMessage: "Space, the final frontier... for penguins", downMessage: "You've returned from some strange place"},
+]
 
 // HAND
 
@@ -31,27 +47,7 @@ class Hand {
         this.isThreeOfAKind = false
         this.isTwoPair = false
         this.isPair = false
-        // Flush
-        this.suitCounter = [[], [], [], []] // S H D C
-        for (i = 0; i <= 4; i++) { // iterates over cards to count suits
-            if (this.cards[i].suit === "S") {
-                this.suitCounter[0].push (this.cards[i])
-            } else if (this.cards[i].suit === "H") {
-                this.suitCounter[1].push (this.cards[i])
-            } else if (this.cards[i].suit === "D") {
-                this.suitCounter[2].push (this.cards[i])
-            } else if (this.cards[i].suit === "C") {
-                this.suitCounter[3].push (this.cards[i])
-            }
-        }
-        for (i = 0; i <= 3; i++) { //iterates over the four suits checking for a flush
-            if (this.suitCounter[i].length === 5) {
-                this.isFlush = true
-            } else if (this.suitCounter[i].length === 4) {
-                this.isAlmostFlush = true
-                this.inUseCards = this.suitCounter[i]
-            }
-        }
+        
         // Sort Cards
         this.sortedRanks = []
         for (i = 0; i < cards.length; i++) {
@@ -70,31 +66,6 @@ class Hand {
             }
         }
         // console.log(this.sortedCards)
-        // Straight Check
-        this.straightCounter = 0
-        for (i = 0; i <= 3; i++) {
-            if (this.sortedCards[i].rank === this.sortedCards[i + 1].rank + 1) { 
-                this.straightCounter += 1
-            }
-        }
-        if (this.straightCounter === 4) {
-            this.isStraight = true
-        }
-        // Almost Straight check. Only tests for the case where you have four in a row, not when you are missing a card in the center ("gutshot"). 
-        // This is intentional, as the chances of winning a gutshot are much lower (about half) than the case where you can add a card on top or bottom
-        if (this.straightCounter === 3 && this.isAlmostFlush === false) { // inAlmostFlush takes priority since it's a higher hand and more likely 
-            this.isAlmostStraight = true
-            // sets this.inUseCards to include the four cards that are in a row
-            this.inUseCards = [...this.sortedCards] // S P R E A D
-            // case where low card is not in straight
-            if (this.inUseCards[3].rank !== this.inUseCards[4].rank + 1) {
-                this.inUseCards.pop()
-            }
-            // case where high card is not in straight
-            if (this.inUseCards[0].rank !== this.inUseCards[1].rank + 1) {
-                this.inUseCards.shift()
-            }
-        }
         // Matches Check. Fills allMatches with arrays containing arrays of cards with matching suits. 
         // Fills inUseCards with all cards that match at least one other card. 
         // allMatches and inUseCards have the same cards but stored in two levels and one level of structure respectively
@@ -149,7 +120,55 @@ class Hand {
             } 
         }
 
-        
+        // Flush
+        this.suitCounter = [[], [], [], []] // S H D C
+        for (i = 0; i <= 4; i++) { // iterates over cards to count suits
+            if (this.cards[i].suit === "S") {
+                this.suitCounter[0].push (this.cards[i])
+            } else if (this.cards[i].suit === "H") {
+                this.suitCounter[1].push (this.cards[i])
+            } else if (this.cards[i].suit === "D") {
+                this.suitCounter[2].push (this.cards[i])
+            } else if (this.cards[i].suit === "C") {
+                this.suitCounter[3].push (this.cards[i])
+            }
+        }
+        for (i = 0; i <= 3; i++) { //iterates over the four suits checking for a flush
+            if (this.suitCounter[i].length === 5) {
+                this.isFlush = true
+            } else if (this.suitCounter[i].length === 4) {
+                this.isAlmostFlush = true
+                if (this.inUseCards.length === 0) {
+                    this.inUseCards = this.suitCounter[i]
+                }
+            }
+        }
+        // Straight Check
+        this.straightCounter = 0
+        for (i = 0; i <= 3; i++) {
+            if (this.sortedCards[i].rank === this.sortedCards[i + 1].rank + 1) { 
+                this.straightCounter += 1
+            }
+        }
+        if (this.straightCounter === 4) {
+            this.isStraight = true
+        }
+        // Almost Straight check. Only tests for the case where you have four in a row, not when you are missing a card in the center ("gutshot"). 
+        // This is intentional, as the chances of winning a gutshot are much lower (about half) than the case where you can add a card on top or bottom
+        if (this.inUseCards.length === 0 && this.straightCounter === 3) { // inAlmostFlush takes priority since it's a higher hand and more likely 
+            this.isAlmostStraight = true
+            // sets this.inUseCards to include the four cards that are in a row
+            this.inUseCards = [...this.sortedCards] // S P R E A D
+            // case where low card is not in straight
+            if (this.inUseCards[3].rank !== this.inUseCards[4].rank + 1) {
+                this.inUseCards.pop()
+            }
+            // case where high card is not in straight
+            if (this.inUseCards[0].rank !== this.inUseCards[1].rank + 1) {
+                this.inUseCards.shift()
+            }
+        }
+
         //Value of Hand
         this.handValue = {value: 0, name: "High Card"}
         // 8 Straight Flush. 
@@ -202,7 +221,7 @@ class Hand {
                 this.handValue.name = "Ace High"
             }
         }
-        
+
         // fill in Use cards with highest two cards if there's no hand or almost hand
         if (this.handValue.value === 0 && this.inUseCards.length === 0) {
             this.inUseCards = [this.sortedCards[0], this.sortedCards[1]]
@@ -248,6 +267,171 @@ getDeck = () => {
 //getDeck()
 //console.log(deck)
 
+
+
+//////////////////////////// Display functions
+
+const unHideCards = () => {
+    playerCard0.classList.remove('hidden')
+    playerCard1.classList.remove('hidden')
+    playerCard2.classList.remove('hidden')
+    playerCard3.classList.remove('hidden')
+    playerCard4.classList.remove('hidden')
+    computerCard0.classList.remove('hidden')
+    computerCard1.classList.remove('hidden')
+    computerCard2.classList.remove('hidden')
+    computerCard3.classList.remove('hidden')
+    computerCard4.classList.remove('hidden')
+}
+
+const showPlayersCards = () => {
+    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.cards[0].name)
+    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.cards[1].name)
+    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.cards[2].name)
+    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.cards[3].name)
+    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
+}
+
+const showPlayersCardsAtEnd = () => {
+    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[0].name)
+    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[1].name)
+    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
+    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
+    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
+    playerCard0.classList.remove('selected-card')
+    playerCard1.classList.remove('selected-card')
+    playerCard2.classList.remove('selected-card')
+    playerCard3.classList.remove('selected-card')
+    playerCard4.classList.remove('selected-card')
+}
+
+const showComputerCards = () => {
+    computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[0].name)
+    computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[1].name)
+    computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[2].name)
+    computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[3].name)
+    computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[4].name)
+}
+
+const showBacksOfComputerCards = () => {
+    computerCard0.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    computerCard1.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    computerCard2.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    computerCard3.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    computerCard4.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+}
+
+
+/////////////////////////////// Functional functions
+
+const deal = () => {
+    getDeck()
+    playersHand = new Hand ([])
+    computersHand = new Hand ([])
+    unHideCards()
+    console.log(playersHand.sortedCards)
+    console.log(playersHand.handValue)
+    console.log(computersHand.sortedCards)
+    console.log(computersHand.handValue)
+    console.log(computersHand.inUseCards)
+    console.log(getWinner())
+    // DOM: top of screen displays 5 face down cards (opactity 0 -> 1). 
+    // Bottom screen displays the players cards. Deal button disapears. 
+    showPlayersCards()
+    showBacksOfComputerCards()
+    //     "Deal cards" and "Keep cards" appear. 
+    winnerText.innerText = ""
+    playersHandText.innerText = ""
+    computersHandText.innerText = ""
+    helpfulText.innerText = ""
+    wagerBox.value = ""
+    wagerBox.classList.remove('hidden')
+    drawCardButton.classList.remove('hidden')
+    holdCardButton.classList.remove('hidden')
+    // foldButton.classList.remove('hidden')
+    dealButtonActive = false
+}
+
+const checkSelected = () => {
+    console.log(playersHand.cards)
+    for (i = 0; i < 5; i++) {
+        if (playersHand.cards[i].selected === true) {
+            return true
+        }
+    }
+    return false
+}
+
+const getWager = () => {
+    wager = parseInt(document.getElementById('wager-box').value)
+    console.log(wager)
+    if (99 < wager && wager <= chips) {
+        pot = wager * 2
+        console.log(pot)
+        chips = chips - parseInt(wager)
+        console.log(chips)
+        chipsCounter.innerText = "Chips: " + chips
+        potCounter.innerText = "Pot: " + pot
+        return true
+    } else if (wager > chips) {
+        alert("A big spender! I do not think you have quite that many chips")
+        return false
+    } else if (wager < 100) {
+        alert("Monseiur Pengeaux requires a bet of at least 100 chips to remain at the table.")
+        return false
+    } else {
+        alert("I'm not sure I understand. Please place a bet of at least 100 chips, but no more than you currently have")
+        return false
+    } 
+}
+
+const manuallyReplaceCards = () => {
+    for (i = 0; i < 5; i++) {
+        if (playersHand.cards[i].selected === false) {
+            playersHand.selectedCards.push(playersHand.cards[i])
+        }
+    }
+    playersHand = new Hand(playersHand.selectedCards)
+}
+
+const dealerReplacesCardsAnimation = () => {
+    computerCard0.classList.add('.computers-discard')
+    console.log("SLIDIN!")
+    //computerCard0.classList.remove('.computers-discard')
+}
+
+const autoReplaceCards = () => {
+    if (computersHand.handValue.value === 7 || computersHand.handValue.value <= 3) {
+        computersHand = new Hand(computersHand.inUseCards)
+    }
+    console.log("replace haha")
+    console.log(computersHand.sortedCards)
+    console.log(computersHand.handValue)
+    dealerReplacesCardsAnimation()
+}
+
+const getRaise = () => {
+    wagerBox.classList.add('hidden')
+    drawCardButton.classList.add('hidden')
+    holdCardButton.classList.add('hidden')
+    foldButton.classList.add('hidden')
+    if (chips >= 100) {
+        raise = computersHand.handValue.value + 3
+        console.log(raise)
+        raise = raise + Math.floor(Math.random() * 5)
+        console.log(raise)
+        raise = Math.max(Math.min(raise, 10), 0)
+        console.log(raise)
+        raise = Math.floor(raise * chips * .1)
+        console.log(raise)
+        computersOffer.innerText = "Dealer raises " + raise + " call or fold?"
+        foldButton2.classList.remove('hidden')
+        callButton.classList.remove('hidden')
+    } else {
+        finishRound()
+    }
+}
+
 const getWinner = () => {
     if (playersHand.handValue.value > computersHand.handValue.value) {
         return "win"
@@ -288,44 +472,34 @@ const getWinner = () => {
     }
 }
 
-//////////////////////////// Display functions
-
-const showPlayersCards = () => {
-    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.cards[0].name)
-    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.cards[1].name)
-    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.cards[2].name)
-    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.cards[3].name)
-    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
+const checkForLevel = () => {
+    let tempLevel = level
+    console.log(level)
+    console.log(tempLevel)
+    for (i = 0; i <= 6; i++) {
+        if (chips >= levelSystem[i].minChips) {
+            level = levelSystem[i]
+            nextLevel = levelSystem[i + 1]
+        }
+    }
+    console.log(level)
+    console.log(tempLevel)
+    if (chips < 100) {
+        helpfulText.innerText = "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table."
+        resetButton.classList.remove('hidden')
+        winnerText.innerText = "Bust!!"
+    } else {
+        if (tempLevel.number < level.number) {
+            helpfulText.innerText = level.upMessage
+        } else if (tempLevel.number > level.number) {
+            helpfulText.innerText = level.downMessage
+        }
+        currentLevelDisplay.innerText = "Current Level: " + level.name
+        nextLevelDisplay.innerText = "Next Level: " + nextLevel.name
+        requiredChips.innerText = "Requires " + nextLevel.minChips + " chips"
+    }
 }
 
-const showPlayersCardsAtEnd = () => {
-    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[0].name)
-    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[1].name)
-    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
-    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
-    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
-    playerCard0.classList.remove('selected-card')
-    playerCard1.classList.remove('selected-card')
-    playerCard2.classList.remove('selected-card')
-    playerCard3.classList.remove('selected-card')
-    playerCard4.classList.remove('selected-card')
-}
-
-const showComputerCards = () => {
-    computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[0].name)
-    computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[1].name)
-    computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[2].name)
-    computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[3].name)
-    computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[4].name)
-}
-
-const showBacksOfComputerCards = () => {
-    computerCard0.setAttribute('src', 'assets/images/cards/backs/blue.svg')
-    computerCard1.setAttribute('src', 'assets/images/cards/backs/blue.svg')
-    computerCard2.setAttribute('src', 'assets/images/cards/backs/blue.svg')
-    computerCard3.setAttribute('src', 'assets/images/cards/backs/blue.svg')
-    computerCard4.setAttribute('src', 'assets/images/cards/backs/blue.svg')
-}
 
 const displayFinalInfo = () => {
     playersHandText.innerText = playersHand.handValue.name
@@ -344,102 +518,8 @@ const displayFinalInfo = () => {
     drawCardButton.classList.add('hidden')
     holdCardButton.classList.add('hidden')
     foldButton.classList.add('hidden')
-}
-
-
-
-/////////////////////////////// Functional functions
-
-const deal = () => {
-    getDeck()
-    playersHand = new Hand ([])
-    computersHand = new Hand ([])
-    console.log(playersHand.sortedCards)
-    console.log(playersHand.handValue)
-    console.log(computersHand.sortedCards)
-    console.log(computersHand.handValue)
-    console.log(computersHand.inUseCards)
-    console.log(getWinner())
-    // DOM: top of screen displays 5 face down cards (opactity 0 -> 1). 
-    // Bottom screen displays the players cards. Deal button disapears. 
-    showPlayersCards()
-    showBacksOfComputerCards()
-    //     "Deal cards" and "Keep cards" appear. 
-    winnerText.innerText = ""
-    playersHandText.innerText = ""
-    computersHandText.innerText = ""
-    helpfulText.innerText = ""
-    wagerBox.classList.remove('hidden')
-    drawCardButton.classList.remove('hidden')
-    holdCardButton.classList.remove('hidden')
-    foldButton.classList.remove('hidden')
-}
-
-const checkSelected = () => {
-    console.log(playersHand.cards)
-    for (i = 0; i < 5; i++) {
-        if (playersHand.cards[i].selected === true) {
-            return true
-        }
-    }
-    return false
-}
-
-const getWager = () => {
-    if (99 < parseInt(document.getElementById('wager-box').value) && parseInt(document.getElementById('wager-box').value) <= chips) {
-        wager = document.getElementById('wager-box').value
-        console.log(wager)
-        pot = parseInt(wager) * 2
-        console.log(pot)
-        chips = chips - parseInt(wager)
-        console.log(chips)
-        chipsCounter.innerText = "Chips: " + chips
-        potCounter.innerText = "Pot: " + pot
-        return true
-    } else {
-        alert("wager must be at least 100 and no more than chips")
-        return false
-    }
-}
-
-const manuallyReplaceCards = () => {
-    for (i = 0; i < 5; i++) {
-        if (playersHand.cards[i].selected === false) {
-            playersHand.selectedCards.push(playersHand.cards[i])
-        }
-    }
-    playersHand = new Hand(playersHand.selectedCards)
-}
-
-const autoReplaceCards = () => {
-    if (computersHand.handValue.value === 7 || computersHand.handValue.value <= 3) {
-        computersHand = new Hand(computersHand.inUseCards)
-    }
-    console.log("replace haha")
-    console.log(computersHand.sortedCards)
-    console.log(computersHand.handValue)
-}
-
-const getRaise = () => {
-    wagerBox.classList.add('hidden')
-    drawCardButton.classList.add('hidden')
-    holdCardButton.classList.add('hidden')
-    foldButton.classList.add('hidden')
-    if (chips >= 100) {
-        raise = computersHand.handValue.value + 3
-        console.log(raise)
-        raise = raise + Math.floor(Math.random() * 5)
-        console.log(raise)
-        raise = Math.max(Math.min(raise, 10), 0)
-        console.log(raise)
-        raise = Math.floor(raise * chips * .1)
-        console.log(raise)
-        computersOffer.innerText = "Dealer raises " + raise + " call or fold?"
-        foldButton2.classList.remove('hidden')
-        callButton.classList.remove('hidden')
-    } else {
-        finishRound()
-    }
+    dealButtonActive = true
+    checkForLevel()
 }
 
 const finishRound = () => {
@@ -460,15 +540,31 @@ const fold = () => {
     displayFinalInfo()
 }
 
+const reset = () => {
+    chips = 1000
+    level = {number: 1, minChips: 100, name: 'Antarctica', upMessage: "Welcome back to Antarctica", downMessage: "Welcome back to Antarctica"}
+    chipsCounter.innerText = "Chips: " + chips
+    resetButton.classList.add('hidden')
+    deal()
+}
+
 ////////////////////// DOM Elements
 
-// Deal Button
-// const dealButton = document.getElementById('deal')
+// Reset Button
+const resetButton = document.getElementById('reset')
+resetButton.addEventListener('click', function(){
+    reset()
+})
+
+// Deal "Button" (the deck)
 const dealButton = document.querySelector('.deck-card')
 dealButton.addEventListener('click', function(){
-    console.log("yeet")
-    deal()
+    if (dealButtonActive === true) {
+        console.log("yeet")
+        deal()
+    }
 })
+let dealButtonActive = true
 
 // Wager Box
 const wagerBox = document.getElementById('wager-box')
@@ -495,6 +591,7 @@ holdCardButton.addEventListener('click', function(){
     //console.log("yeet 2049")
     //getWager()
     if (getWager() === true) {
+        showPlayersCardsAtEnd()
         autoReplaceCards()
         getRaise()
     }
@@ -517,6 +614,11 @@ const chipsCounter = document.getElementById('chips-counter')
 
 // Pot counter
 const potCounter = document.getElementById('pot-counter')
+
+// Level displays
+const currentLevelDisplay = document.getElementById('current-level')
+const nextLevelDisplay = document.getElementById('next-level')
+const requiredChips = document.getElementById('next-level-chips')
 
 // Player Cards
 const playerCard0 = document.getElementById('pc0')
@@ -594,17 +696,21 @@ TO DO Thursday night:
     impliment calling or not of computer's wager X
     and use of hidden class X
     IF FIRST TWO AREN'T DONE IN THE MORNING, START HERE ANYWAY:
-    bust screen for when chips drops below 100
-    Penguins! penguin background and penguin backs for the cards
+    Penguins! penguin background and penguin backs for the cards X
     sounds
     create options menu and menus for sound and background (with two themes)
     animations for cards entering leaving hand (especially Dealer's hand)
     mobile responsive design
-    unlocking system 
+    bust screen for when chips drops below 100/ unlocking system X
 
-    QUESTIONS:
-    how to get rid/add border
-    animations for cards entering leaving hand (especially Dealer's hand)
+    debug: check spreads X
+
+    After lunch:
+    1. sounds
+    2. fonts
+    3. create options menu and menus for sound and background (with two themes)
+    4. animations for cards entering leaving Dealer's hand
+    5. mobile responsive design
 
 
 

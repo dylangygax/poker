@@ -10,7 +10,7 @@
 <body>
     <div id="container">
         <header>
-            <h1>someone or something which pokes</h1>
+            <h1>PENGUIN POKER</h1>
         </header>
         <div class="row" id="top-row">
             <div class="hand-holder">
@@ -19,34 +19,38 @@
             </div>
             <ul>
                 <li>
-                    <img class="computer-card" id="cc0"></img>
+                    <img class="computer-card  hidden" id="cc0"></img>
                 </li>
                 <li>
-                    <img class="computer-card" id="cc1"></img>
+                    <img class="computer-card  hidden" id="cc1"></img>
                 </li>
                 <li>
-                    <img class="computer-card" id="cc2"></img>
+                    <img class="computer-card  hidden" id="cc2"></img>
                 </li>
                 <li>
-                    <img class="computer-card" id="cc3"></img>
+                    <img class="computer-card  hidden" id="cc3"></img>
                 </li>
                 <li>
-                    <img class="computer-card" id="cc4"></img>
+                    <img class="computer-card  hidden" id="cc4"></img>
                 </li>
             </ul>
             <div id="info-panel">
                 <p id='chips-counter'>Chips: 1000</p>
                 <p id='pot-counter'>Pot: 0</p>
+                <p id='current-level'>Current Level: Antarctica</p>
+                <p id='next-level'>Next Level: Ocean</p>
+                <p id='next-level-chips'>Requires 3000 chips</p>
             </div>
         </div>
         <div class="row" id="middle-row">
             <h2 id="winner-text"></h2>
-            <img class="deck-card" src="./assets/images/cards/backs/blue.svg"></img>
-            <div>
+            <img class="deck-card" src="./assets/images/cards/backs/penguin-cute.svg"></img>
+            <div class="call-options-holder"> 
                 <h2 id="helpful-text">Click the deck to begin!</h2>
                 <h2 id="computers-raise"></h2>
                 <button class="call-option hidden" id="call">Call</button>
                 <button class="call-option hidden" id="fold2">Fold</button>
+                <button class="call-option hidden" id="reset">Play Again?</button>
             </div>
         </div>
         <div class="row" id="bottom-row">
@@ -57,19 +61,19 @@
             <div id="players-cards">
             <ul>
                 <li>
-                    <img class="player-card" id="pc0"></img>
+                    <img class="player-card hidden" id="pc0"></img>
                 </li>
                 <li>
-                    <img class="player-card" id="pc1"></img>
+                    <img class="player-card hidden" id="pc1"></img>
                 </li>
                 <li>
-                    <img class="player-card" id="pc2"></img>
+                    <img class="player-card hidden" id="pc2"></img>
                 </li>
                 <li>
-                    <img class="player-card" id="pc3"></img>
+                    <img class="player-card hidden" id="pc3"></img>
                 </li>
                 <li>
-                    <img class="player-card" id="pc4"></img>
+                    <img class="player-card hidden" id="pc4"></img>
                 </li>
             </ul>
             </div>
