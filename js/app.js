@@ -4,6 +4,7 @@
 
 let chips = 1000
 let wager = 0
+let raise = 0
 let pot = 0
 
 // DECK
@@ -337,6 +338,11 @@ const showPlayersCardsAtEnd = () => {
     playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
     playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
     playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
+    playerCard0.classList.remove('selected-card')
+    playerCard1.classList.remove('selected-card')
+    playerCard2.classList.remove('selected-card')
+    playerCard3.classList.remove('selected-card')
+    playerCard4.classList.remove('selected-card')
 }
 
 const showComputerCards = () => {
@@ -385,8 +391,9 @@ const autoReplaceCards = () => {
     console.log(computersHand.handValue)
 }
 
+
 const getRaise = () => {
-    let raise = computersHand.handValue.value + 3
+    raise = computersHand.handValue.value + 3
     console.log(raise)
     raise = raise + Math.floor(Math.random() * 5)
     console.log(raise)
@@ -394,6 +401,7 @@ const getRaise = () => {
     console.log(raise)
     raise = Math.floor(raise * chips * .1)
     console.log(raise)
+    computersOffer.innerText = "Dealer raises " + raise + " call or fold?"
 }
 
 const checkSelected = () => {
@@ -424,6 +432,7 @@ const getWager = () => {
         chips = chips - parseInt(wager)
         console.log(chips)
         chipsCounter.innerText = "Chips: " + chips
+        potCounter.innerText = "Pot: " + pot
         return true
     } else {
         alert("wager must be greater than zero and less than chips")
@@ -432,8 +441,8 @@ const getWager = () => {
 }
 
 const finishRound = () => {
-    autoReplaceCards()
-    getRaise()
+    // autoReplaceCards()
+    // getRaise()
     // DOM: Deal button appears. Top of screen displays computer's cards. Hand is displayed in text for both computer and player      
     // getWinner()
     playersHandText.innerText = playersHand.handValue.name
@@ -442,11 +451,6 @@ const finishRound = () => {
     helpfulText.innerText = 'Click the deck to deal another hand!'
     showComputerCards()
     showPlayersCardsAtEnd()
-    playerCard0.classList.remove('selected-card')
-    playerCard1.classList.remove('selected-card')
-    playerCard2.classList.remove('selected-card')
-    playerCard3.classList.remove('selected-card')
-    playerCard4.classList.remove('selected-card')
     if (getWinner() === "win") {
         winnerText.innerText = "You win!!"
         console.log("YOU WIN!!")
@@ -456,7 +460,20 @@ const finishRound = () => {
         winnerText.innerText = "You lose!!"
         console.log("YOU LOSE!!")
     }
+    pot = 0
     chipsCounter.innerText = "Chips: " + chips
+    potCounter.innerText = "Pot: " + pot
+    computersOffer.innerText = ""
+}
+
+const fold = () => {
+    playersHandText.innerText = playersHand.handValue.name
+    console.log(playersHand.handValue.name)
+    computersHandText.innerText = computersHand.handValue.name
+    helpfulText.innerText = 'Click the deck to deal another hand!'
+    showComputerCards()
+    showPlayersCardsAtEnd()
+    winnerText.innerText = "Fold!"
 }
 
 // Wager Box
@@ -476,14 +493,21 @@ holdCardButton.addEventListener('click', function(){
     //console.log("yeet 2049")
     //getWager()
     if (getWager() === true) {
-        finishRound()
+        autoReplaceCards()
+        getRaise()
     }
 })
 
 // Fold button
 const foldButton = document.getElementById('fold')
 foldButton.addEventListener('click', function(){
-    finishRound()
+    fold()
+})
+
+// Fold Button 2
+const foldButton2 = document.getElementById('fold2')
+foldButton2.addEventListener('click', function(){
+    fold()
 })
 
 // Draw Cards Button
@@ -493,7 +517,9 @@ drawCardButton.addEventListener('click', function(){
     if (checkSelected()) {
         if (getWager() === true) {
             manuallyReplaceCards()
-            finishRound()
+            showPlayersCardsAtEnd()
+            autoReplaceCards()
+            getRaise()
         }
     } else {
         alert("pick some cards to discard, you damned fool!")
@@ -503,6 +529,9 @@ drawCardButton.addEventListener('click', function(){
 // Chips counter
 
 const chipsCounter = document.getElementById('chips-counter')
+
+// Pot counter
+const potCounter = document.getElementById('pot-counter')
 
 // Player Cards
 const playerCard0 = document.getElementById('pc0')
@@ -557,6 +586,24 @@ const computersHandText = document.getElementById('computers-hand-value')
 
 // Helpful text
 const helpfulText = document.getElementById('helpful-text')
+
+// Computer's offer
+const computersOffer = document.getElementById('computers-raise')
+
+// Call Button
+const callButton = document.getElementById('call')
+callButton.addEventListener('click', function(){
+    console.log("call button pressed")
+    chips = chips - raise
+    pot = pot + (raise * 2)
+    chipsCounter.innerText = "Chips: " + chips
+    potCounter.innerText = "Pot: " + pot
+    finishRound()
+})
+
+
+
+
 
 // let playersHand = new Hand ([])
 // let computersHand = new Hand ([])
@@ -660,11 +707,13 @@ loose DOM event listeners
 
 TO DO Thursday night:
     reorganize code according to the list above this to do list. look to clean things up and use ... where needed
-    impliment calling or not of computer's wager, and use of hidden class
+    impliment calling or not of computer's wager X
+    and use of hidden class
     IF FIRST TWO AREN'T DONE IN THE MORNING, START HERE ANYWAY:
     Penguins! penguin background and penguin backs for the cards
     create options menu and menus for sound and background (with two themes)
     unlocking system 
+    mobile responsive design
 
 
 HIDDEN CLASS, DISPLAY: NONE
