@@ -350,6 +350,7 @@ const deal = () => {
     holdCardButton.classList.remove('hidden')
     // foldButton.classList.remove('hidden')
     dealButtonActive = false
+    cardDealt.play()
 }
 
 const checkSelected = () => {
@@ -391,23 +392,40 @@ const manuallyReplaceCards = () => {
             playersHand.selectedCards.push(playersHand.cards[i])
         }
     }
+    cardDealt.play()
     playersHand = new Hand(playersHand.selectedCards)
 }
 
 const dealerReplacesCardsAnimation = () => {
-    computerCard0.classList.add('.computers-discard')
-    console.log("SLIDIN!")
-    //computerCard0.classList.remove('.computers-discard')
+    // computerCard0.classList.add('computers-discard')
+    // console.log("SLIDIN!")
+    // console.log(computerCard0)
+    // setTimeout(() => {computerCard0.classList.remove('computers-discard')}, 500)
+    console.log(computersHand.cards)
+    for (i = 0; i < 5; i++) {
+        if (!computersHand.inUseCards.includes(computersHand.cards[i])) {
+            console.log('my log say something' + i)
+            computerCardArray[i].classList.add('computers-discard')
+            //setTimeout(() => {computerCard0.classList.remove('computers-discard')}, 500)
+        }
+    }
+    setTimeout(() => {
+        for (i = 0; i < 5; i++) {
+            //if (!computersHand.inUseCards.includes(computersHand.cards[i])) {
+                computerCardArray[i].classList.remove('computers-discard')}
+            //}
+    } , 500)
+    setTimeout((console.log("waitin")), 300)
 }
 
 const autoReplaceCards = () => {
     if (computersHand.handValue.value === 7 || computersHand.handValue.value <= 3) {
+        dealerReplacesCardsAnimation()
         computersHand = new Hand(computersHand.inUseCards)
     }
     console.log("replace haha")
     console.log(computersHand.sortedCards)
     console.log(computersHand.handValue)
-    dealerReplacesCardsAnimation()
 }
 
 const getRaise = () => {
@@ -488,6 +506,7 @@ const checkForLevel = () => {
         helpfulText.innerText = "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table."
         resetButton.classList.remove('hidden')
         winnerText.innerText = "Bust!!"
+        dealButtonActive = false
     } else {
         if (tempLevel.number < level.number) {
             helpfulText.innerText = level.upMessage
@@ -632,26 +651,31 @@ playerCard0.addEventListener('click', function(){
     playersHand.cards[0].selected = !(playersHand.cards[0].selected)
     playerCard0.classList.toggle('selected-card')
     console.log(playersHand.cards[0].selected)
+    cardSelect.play()
 })
 playerCard1.addEventListener('click', function(){
     playersHand.cards[1].selected = !(playersHand.cards[1].selected)
     playerCard1.classList.toggle('selected-card')
     console.log(playersHand.cards[1].selected)
+    cardSelect.play()
 })
 playerCard2.addEventListener('click', function(){
     playersHand.cards[2].selected = !(playersHand.cards[2].selected)
     playerCard2.classList.toggle('selected-card')
     console.log(playersHand.cards[2].selected)
+    cardSelect.play()
 })
 playerCard3.addEventListener('click', function(){
     playersHand.cards[3].selected = !(playersHand.cards[3].selected)
     playerCard3.classList.toggle('selected-card')
     console.log(playersHand.cards[3].selected)
+    cardSelect.play()
 })
 playerCard4.addEventListener('click', function(){
     playersHand.cards[4].selected = !(playersHand.cards[4].selected)
     playerCard4.classList.toggle('selected-card')
     console.log(playersHand.cards[4].selected)
+    cardSelect.play()
 })
 
 // Computer Cards
@@ -660,6 +684,8 @@ const computerCard1 = document.getElementById('cc1')
 const computerCard2 = document.getElementById('cc2')
 const computerCard3 = document.getElementById('cc3')
 const computerCard4 = document.getElementById('cc4')
+const computerCardArray = [computerCard0, computerCard1, computerCard2, computerCard3, computerCard4]
+console.log(computerCardArray[2])
 
 // Winner text
 const winnerText = document.getElementById('winner-text')
@@ -687,8 +713,10 @@ callButton.addEventListener('click', function(){
     finishRound()
 })
 
+//////////////////////////////// SOUND
 
-
+const cardDealt = new Audio('assets/audio/effects/404015__paul-sinnett__card.wav')
+const cardSelect = new Audio('assets/audio/effects/436884__icyjim__select-menu.wav')
 
 /* 
 TO DO Thursday night:
@@ -706,17 +734,14 @@ TO DO Thursday night:
     debug: check spreads X
 
     After lunch:
-    1. sounds
+    3. sounds 
     2. fonts
-    3. create options menu and menus for sound and background (with two themes)
-    4. animations for cards entering leaving Dealer's hand
+    4. create options menu and menus for sound and background (with two themes)
+    1. animations for cards entering leaving Dealer's hand
     5. mobile responsive design
 
 
+    display fonts
+    CSS button styles
 
-
-HIDDEN CLASS, DISPLAY: NONE
-
-functionality improvements:
-raise minimum bet to 100?
 */
