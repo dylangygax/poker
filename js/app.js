@@ -272,53 +272,70 @@ getDeck = () => {
 //////////////////////////// Display functions
 
 const unHideCards = () => {
-    playerCard0.classList.remove('hidden')
-    playerCard1.classList.remove('hidden')
-    playerCard2.classList.remove('hidden')
-    playerCard3.classList.remove('hidden')
-    playerCard4.classList.remove('hidden')
-    computerCard0.classList.remove('hidden')
-    computerCard1.classList.remove('hidden')
-    computerCard2.classList.remove('hidden')
-    computerCard3.classList.remove('hidden')
-    computerCard4.classList.remove('hidden')
+    // playerCard0.classList.remove('hidden')
+    // playerCard1.classList.remove('hidden')
+    // playerCard2.classList.remove('hidden')
+    // playerCard3.classList.remove('hidden')
+    // playerCard4.classList.remove('hidden')
+    // computerCard0.classList.remove('hidden')
+    // computerCard1.classList.remove('hidden')
+    // computerCard2.classList.remove('hidden')
+    // computerCard3.classList.remove('hidden')
+    // computerCard4.classList.remove('hidden')
+    for (i = 0; i < 5; i++) {
+        playerCardsArray[i].classList.remove('hidden')
+        computerCardArray[i].classList.remove('hidden')
+    }
 }
 
 const showPlayersCards = () => {
-    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.cards[0].name)
-    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.cards[1].name)
-    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.cards[2].name)
-    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.cards[3].name)
-    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
+    // playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.cards[0].name)
+    // playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.cards[1].name)
+    // playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.cards[2].name)
+    // playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.cards[3].name)
+    // playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
+    for (i = 0; i < 5; i++) {
+        playerCardsArray[i].setAttribute('src', 'assets/images/cards/' + playersHand.cards[i].name)
+    }
 }
 
 const showPlayersCardsAtEnd = () => {
-    playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[0].name)
-    playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[1].name)
-    playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
-    playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
-    playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
-    playerCard0.classList.remove('selected-card')
-    playerCard1.classList.remove('selected-card')
-    playerCard2.classList.remove('selected-card')
-    playerCard3.classList.remove('selected-card')
-    playerCard4.classList.remove('selected-card')
+    // playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[0].name)
+    // playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[1].name)
+    // playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
+    // playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
+    // playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
+    // playerCard0.classList.remove('selected-card')
+    // playerCard1.classList.remove('selected-card')
+    // playerCard2.classList.remove('selected-card')
+    // playerCard3.classList.remove('selected-card')
+    // playerCard4.classList.remove('selected-card')
+    for (i = 0; i < 5; i++) {
+        playerCardsArray[i].setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[i].name)
+        playerCardsArray[i].classList.remove('selected-card')
+    }
 }
 
 const showComputerCards = () => {
-    computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[0].name)
-    computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[1].name)
-    computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[2].name)
-    computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[3].name)
-    computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[4].name)
+    // computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[0].name)
+    // computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[1].name)
+    // computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[2].name)
+    // computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[3].name)
+    // computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[4].name)
+    for (i = 0; i < 5; i++) {
+        computerCardArray[i].setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[i].name)
+    }
 }
 
 const showBacksOfComputerCards = () => {
-    computerCard0.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    computerCard1.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    computerCard2.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    computerCard3.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    computerCard4.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    // computerCard0.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    // computerCard1.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    // computerCard2.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    // computerCard3.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    // computerCard4.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    for (i = 0; i < 5; i++) {
+        computerCardArray[i].setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
+    }
 }
 
 
@@ -343,14 +360,16 @@ const deal = () => {
     winnerText.innerText = ""
     playersHandText.innerText = ""
     computersHandText.innerText = ""
-    helpfulText.innerText = ""
+    helpfulText.innerText = "Enter a wager below. Click any cards you want to replace."
     wagerBox.value = ""
     wagerBox.classList.remove('hidden')
     drawCardButton.classList.remove('hidden')
     holdCardButton.classList.remove('hidden')
     // foldButton.classList.remove('hidden')
     dealButtonActive = false
-    cardDealt.play()
+    if (soundOn) {
+        cardDealt.play()
+    }
 }
 
 const checkSelected = () => {
@@ -375,13 +394,16 @@ const getWager = () => {
         potCounter.innerText = "Pot: " + pot
         return true
     } else if (wager > chips) {
-        alert("A big spender! I do not think you have quite that many chips")
+        if (soundOn) {mistakeSound.play()}
+        helpfulText.innerText = "A big spender! I do not think you have quite that many chips"
         return false
     } else if (wager < 100) {
-        alert("Monseiur Pengeaux requires a bet of at least 100 chips to remain at the table.")
+        if (soundOn) {mistakeSound.play()}
+        helpfulText.innerText = "Monseiur Pengeaux requires a bet of at least 100 chips to remain at the table."
         return false
     } else {
-        alert("I'm not sure I understand. Please place a bet of at least 100 chips, but no more than you currently have")
+        if (soundOn) {mistakeSound.play()}
+        ahelpfulText.innerText = "I'm not sure I understand. Please place a bet of at least 100 chips, but no more than you currently have"
         return false
     } 
 }
@@ -392,7 +414,9 @@ const manuallyReplaceCards = () => {
             playersHand.selectedCards.push(playersHand.cards[i])
         }
     }
-    cardDealt.play()
+    if (soundOn) {
+        cardDealt.play()
+    }
     playersHand = new Hand(playersHand.selectedCards)
 }
 
@@ -414,7 +438,7 @@ const dealerReplacesCardsAnimation = () => {
             //if (!computersHand.inUseCards.includes(computersHand.cards[i])) {
                 computerCardArray[i].classList.remove('computers-discard')}
             //}
-    } , 500)
+    } , 1000)
     setTimeout((console.log("waitin")), 300)
 }
 
@@ -432,7 +456,6 @@ const getRaise = () => {
     wagerBox.classList.add('hidden')
     drawCardButton.classList.add('hidden')
     holdCardButton.classList.add('hidden')
-    foldButton.classList.add('hidden')
     if (chips >= 100) {
         raise = computersHand.handValue.value + 3
         console.log(raise)
@@ -442,8 +465,8 @@ const getRaise = () => {
         console.log(raise)
         raise = Math.floor(raise * chips * .1)
         console.log(raise)
-        computersOffer.innerText = "Dealer raises " + raise + " call or fold?"
-        foldButton2.classList.remove('hidden')
+        helpfulText.innerText = "Dealer raises " + raise + " call or fold?"
+        foldButton.classList.remove('hidden')
         callButton.classList.remove('hidden')
     } else {
         finishRound()
@@ -507,9 +530,11 @@ const checkForLevel = () => {
         resetButton.classList.remove('hidden')
         winnerText.innerText = "Bust!!"
         dealButtonActive = false
+        if (soundOn) {bustSound.play()}
     } else {
         if (tempLevel.number < level.number) {
             helpfulText.innerText = level.upMessage
+            if (soundOn) {newLevel.play()}
         } else if (tempLevel.number > level.number) {
             helpfulText.innerText = level.downMessage
         }
@@ -531,12 +556,11 @@ const displayFinalInfo = () => {
     chipsCounter.innerText = "Chips: " + chips
     potCounter.innerText = "Pot: " + pot
     computersOffer.innerText = ""
-    foldButton2.classList.add('hidden')
+    foldButton.classList.add('hidden')
     callButton.classList.add('hidden')
     wagerBox.classList.add('hidden')
     drawCardButton.classList.add('hidden')
     holdCardButton.classList.add('hidden')
-    foldButton.classList.add('hidden')
     dealButtonActive = true
     checkForLevel()
 }
@@ -546,10 +570,16 @@ const finishRound = () => {
         winnerText.innerText = "You win!!"
         console.log("YOU WIN!!")
         chips = chips + pot
+        if (soundOn) {
+            winSound.play()
+        }
     }
     if (getWinner() === "loss") {
         winnerText.innerText = "You lose!!"
         console.log("YOU LOSE!!")
+        if (soundOn) {
+            lossSound.play()
+        }
     }
     displayFinalInfo()
 }
@@ -600,7 +630,8 @@ drawCardButton.addEventListener('click', function(){
             getRaise()
         }
     } else {
-        alert("pick some cards to discard, you damned fool!")
+        if (soundOn) {mistakeSound.play()}
+        helpfulText.innerText = "Please select the cards you wish to discard"
     }
 })
 
@@ -616,15 +647,9 @@ holdCardButton.addEventListener('click', function(){
     }
 })
 
-// Fold button
+// Fold Button 2
 const foldButton = document.getElementById('fold')
 foldButton.addEventListener('click', function(){
-    fold()
-})
-
-// Fold Button 2
-const foldButton2 = document.getElementById('fold2')
-foldButton2.addEventListener('click', function(){
     fold()
 })
 
@@ -645,38 +670,47 @@ const playerCard1 = document.getElementById('pc1')
 const playerCard2 = document.getElementById('pc2')
 const playerCard3 = document.getElementById('pc3')
 const playerCard4 = document.getElementById('pc4')
+const playerCardsArray = [playerCard0, playerCard1, playerCard2, playerCard3, playerCard4]
 
 // Player Cards - functionality
 playerCard0.addEventListener('click', function(){
     playersHand.cards[0].selected = !(playersHand.cards[0].selected)
     playerCard0.classList.toggle('selected-card')
     console.log(playersHand.cards[0].selected)
-    cardSelect.play()
+    if (soundOn) {cardSelect.play()}
 })
 playerCard1.addEventListener('click', function(){
     playersHand.cards[1].selected = !(playersHand.cards[1].selected)
     playerCard1.classList.toggle('selected-card')
     console.log(playersHand.cards[1].selected)
-    cardSelect.play()
+    if (soundOn) {cardSelect.play()}
 })
 playerCard2.addEventListener('click', function(){
     playersHand.cards[2].selected = !(playersHand.cards[2].selected)
     playerCard2.classList.toggle('selected-card')
     console.log(playersHand.cards[2].selected)
-    cardSelect.play()
+    if (soundOn) {cardSelect.play()}
 })
 playerCard3.addEventListener('click', function(){
     playersHand.cards[3].selected = !(playersHand.cards[3].selected)
     playerCard3.classList.toggle('selected-card')
     console.log(playersHand.cards[3].selected)
-    cardSelect.play()
+    if (soundOn) {cardSelect.play()}
 })
 playerCard4.addEventListener('click', function(){
     playersHand.cards[4].selected = !(playersHand.cards[4].selected)
     playerCard4.classList.toggle('selected-card')
     console.log(playersHand.cards[4].selected)
-    cardSelect.play()
+    if (soundOn) {cardSelect.play()}
 })
+// for (i = 0; i < 5; i++) {
+//     playerCardsArray[i].addEventListener('click', function(){
+//         playersHand.cards[i].selected = !(playersHand.cards[i].selected)
+//         playerCard4.classList.toggle('selected-card')
+//         console.log(playersHand.cards[i].selected)
+//         cardSelect.play()
+//     })
+// }
 
 // Computer Cards
 const computerCard0 = document.getElementById('cc0')
@@ -713,10 +747,28 @@ callButton.addEventListener('click', function(){
     finishRound()
 })
 
+// Mute Button
+const muteButton = document.getElementById('mute')
+let soundOn = true
+muteButton.addEventListener('click', function() {
+    if (soundOn) {
+        muteButton.innerText = 'unmute'
+    } else {
+        muteButton.innerText = 'mute'
+    }
+    soundOn = !soundOn
+    console.log(soundOn)
+})
+
 //////////////////////////////// SOUND
 
 const cardDealt = new Audio('assets/audio/effects/404015__paul-sinnett__card.wav')
 const cardSelect = new Audio('assets/audio/effects/436884__icyjim__select-menu.wav')
+const winSound = new Audio('assets/audio/effects/456965__funwithsound__short-success-sound-glockenspiel.mp3')
+const bustSound = new Audio('assets/audio/effects/371874__saiiotakukm__turuuuun-desanimo.mp3')
+const lossSound = new Audio('assets/audio/effects/423012__orangemcmuffin__failure.wav')
+const newLevel = new Audio('assets/audio/effects/439889__simonbay__lushlife-levelup.wav')
+const mistakeSound = new Audio('assets/audio/effects/483598__raclure__wrong.mp3')
 
 /* 
 TO DO Thursday night:
@@ -734,14 +786,17 @@ TO DO Thursday night:
     debug: check spreads X
 
     After lunch:
-    3. sounds 
+    3. sounds X
     2. fonts
-    4. create options menu and menus for sound and background (with two themes)
-    1. animations for cards entering leaving Dealer's hand
+    4. create options menu and menus for sound and background (with two themes) meh ---- JUST FOR SOUND!
+    1. animations for cards entering leaving Dealer's hand X
     5. mobile responsive design
 
+    
 
     display fonts
     CSS button styles
+
+    sounds needed: level up X, alert! X
 
 */

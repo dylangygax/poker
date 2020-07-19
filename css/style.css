@@ -1,10 +1,12 @@
-h1 {
-    color: black;
-}
+/*@font-face {
+    src: url(assets/fonts/casino_2/casino.tff);
+    font-family: myFirstFont;
+}*/
 
 body {
     margin: 0;
     background-color: black;
+    font-family: 'Roboto', sans-serif;
 }
 
 #container {
@@ -20,6 +22,11 @@ body {
 header {
     height: 10%;
     text-align: center;
+    font-family: myFirstFont;
+}
+
+h1 {
+    font-size: 30px;
 }
 
 .row {
@@ -38,16 +45,12 @@ header {
     max-width: 34vw;
 }
 
-/*
+
 .hand-holder {
-    background-color: darkred;
-    height: 150px;
-    width: 150px;
-    border: 2px solid black;
-    border-radius: 4%;
-    padding: 15px;
+    display: flex;
+    justify-content: left;
 }
-*/
+
 
 .deck-card, .player-card, .computer-card {
     height: 120px;
@@ -56,20 +59,21 @@ header {
     border: 2px solid black;
     border-radius: 10%;
     background-color: whitesmoke;
+    justify-content: center;
 } 
 
 .player-card, .computer-card {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.4s ease-in-out;
 }
 
 .selected-card {
     transform: translateY(-60px);
-    transition: all 0.2s ease-in-out;
+    transition: all 0.4s ease-in-out;
 }
 
 .computers-discard {
     transform: translateY(80px);
-    transition: all 0.2s ease-in-out;
+    transition: all 0.4s ease-in-out;
 }
 
 .draw-option, .call-option {
@@ -87,9 +91,11 @@ header {
 
 #info-panel {
     text-align: center;
+    line-height: .8;
+    justify-content: end;
 }
 
-/*#bottom-row*/ ul {
+ul {
     display: flex;
     justify-content: center;
     list-style: none;
@@ -104,8 +110,8 @@ header {
 
 @media only screen and (max-width: 480px) {
     .deck-card, .player-card, .computer-card {
-        width: 8vw;
-        height: 8vh;
+        width: 10vw;
+        height: 10vh;
     }
     #bottom-row, #top-row {
         display: flex;
@@ -114,13 +120,69 @@ header {
     .button-holder {
         display: flex;
         flex-direction: row;
+        justify-content: center;
     }
-    .draw-option {
+    .draw-option, .call-option {
         width: 50px;
         height: 40px;
     }
     #wager-box {
         width: 100px;
         height: 30px;
+    }
+    .hand-holder {
+        flex-direction: row;
+    }
+    .hand-holder h2{
+        padding: 10px;
+    }
+    #top-row{
+        flex-direction: column-reverse;
+    }
+    #info-panel {
+        text-align: center;
+        line-height: .55;
+        display: flex;
+        flex-direction: row;
+        margin: 10px;
+    }
+    #helpful-text {
+        font-size: 18px;
+        margin: auto 20px;
+        text-align: center;
+    }
+    #call-buttons {
+        display: flex;
+        flex-direction: row;
+    }
+    .deck-card {
+        margin: 70px;
+    }
+    #draw-cards, #hold-cards {
+        transform: translateY(-10px);
+    }
+    .player-card, .computer-card {
+        transition: all 0.4s ease-in-out;
+    }
+    
+    .selected-card {
+        transform: translateY(-30px);
+        transition: all 0.4s ease-in-out;
+    }
+    
+    .computers-discard {
+        transform: translateY(30px);
+        transition: all 0.4s ease-in-out;
+    }
+    header {
+        margin: 0 0 35px 0;
+    }
+    #bottom-row {
+        margin: -50px 0 15px 0;
+    }
+    #winner-text {
+        font-size: 25px;
+        margin: auto 20px;
+        text-align: center;
     }
 }

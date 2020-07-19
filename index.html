@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Penguin Poker</title>
     <script defer src="./js/app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -35,11 +36,16 @@
                 </li>
             </ul>
             <div id="info-panel">
-                <p id='chips-counter'>Chips: 1000</p>
-                <p id='pot-counter'>Pot: 0</p>
-                <p id='current-level'>Current Level: Antarctica</p>
-                <p id='next-level'>Next Level: Ocean</p>
-                <p id='next-level-chips'>Requires 3000 chips</p>
+                <div id="info-1">
+                    <p id='chips-counter'>Chips: 1000</p>
+                    <p id='pot-counter'>Pot: 0</p>
+                    <p id='current-level'>Current Level: Antarctica</p>
+                </div>
+                <div id="info-2">
+                    <p id='next-level'>Next Level: Ocean</p>
+                    <p id='next-level-chips'>Requires 3000 chips</p>
+                    <button id="mute">mute</button>
+                </div>
             </div>
         </div>
         <div class="row" id="middle-row">
@@ -48,8 +54,10 @@
             <div class="call-options-holder"> 
                 <h2 id="helpful-text">Click the deck to begin!</h2>
                 <h2 id="computers-raise"></h2>
-                <button class="call-option hidden" id="call">Call</button>
-                <button class="call-option hidden" id="fold2">Fold</button>
+                <div id="call-buttons">
+                    <button class="call-option hidden" id="call">Call</button>
+                    <button class="call-option hidden" id="fold">Fold</button>
+                </div>
                 <button class="call-option hidden" id="reset">Play Again?</button>
             </div>
         </div>
@@ -78,10 +86,9 @@
             </ul>
             </div>
             <div class="button-holder">
-                <input type="text" placeholder="What's yr wager?" id="wager-box" class="hidden">
+                <input type="text" placeholder="What's your wager?" id="wager-box" class="hidden">
                 <button class="draw-option hidden" id="draw-cards">Draw Cards</button>
                 <button class="draw-option hidden" id="hold-cards" >Hold Cards</button>
-                <button class="draw-option hidden" id="fold">Fold</button>
             </div>
         </div>
     </div>
