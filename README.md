@@ -10,7 +10,6 @@ One function in particular I'd like to highlight, is how I determined matches be
 
 Here's what I came up with: 
 
-        ```javascript
         this.allMatches = []
         this.matchesArray = []
         this.inMatch = false
@@ -32,7 +31,6 @@ Here's what I came up with:
         if (this.matchesArray.length > 0) {
             this.allMatches.push(this.matchesArray)
         }
-        ```
 
 Part of what makes this method elegant is that it uses the sortedCards array-- all five cards sorted from highest to lowest. I needed to create this array anyway for tie breaker situations, but I soon realized it would help me with a myriad of problems including this one. Since any cards of equal rank will be adjacent in the sortedCards array, I needed only to compare each card to the one before it to determine if it was a match. (I could have also compared to the one afterwards for the same effect.) The for loop begins with second card since the first card has no card before it to compare to. A boolean, inMatch tracks whether the method is actively within a match. If so, it only adds the current card to the matchesArray. If not, it adds the current card AND the previous. This is because the previous card is also part of the match but won't have been pushed to the matchesArray yet, since it is the very first card of the match. Lastly (second else if statement) if a card is NOT a match, but we are currently within an active match, the program recognises that the match is over. The completed matchArray is pushed to the allMatches array, which stores it along with any other matches. allMatches is an array which stores arrays. It will only ever have at most two elements, in the case of a Full House or Two Pair. From the lengths of the arrays within the all matches array we can determine the value of our hand: 2 for a pair; 3 for a three of a kind; 4 for a four od a kind; 2, 2 for Two Pair; 3, 2 for a Full House.
 
@@ -44,13 +42,11 @@ From the very first planning stages I gravitated towards the five card draw form
 
 To help solve this issue I built the Hand class to be flexible, allowing it to take cards as input and just fill in the rest:
 
-    ```javascript
     this.cards = cards;
         this.numberOfCardsNeeded = 5 - this.cards.length;
         for (i = 1; i <= this.numberOfCardsNeeded; i++) {
             this.cards.push(deck.shift())
         }
-    ```
 
 When each hand begins an instance of the Hand class is created for each of the players which takes no cards arguments and therefore grabs five from the shuffled deck. 
 
