@@ -281,6 +281,7 @@ const showPlayersCards = () => {
 }
 
 const showPlayersCardsAtEnd = () => {
+    playerCardSlideActive = false
     for (i = 0; i < 5; i++) {
         playerCardsArray[i].setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[i].name)
         playerCardsArray[i].classList.remove('selected-card')
@@ -314,6 +315,7 @@ const deal = () => {
     console.log(computersHand.inUseCards)
     console.log(getWinner())
     showPlayersCards()
+    playerCardSlideActive = true
     showBacksOfComputerCards()
     winnerText.innerText = ""
     playersHandText.innerText = ""
@@ -408,14 +410,10 @@ const getRaise = () => {
     drawCardButton.classList.add('hidden')
     holdCardButton.classList.add('hidden')
     if (chips >= 100) {
-        raise = computersHand.handValue.value + 3
-        console.log(raise)
+        raise = computersHand.handValue.value + 2
         raise = raise + Math.floor(Math.random() * 5)
-        console.log(raise)
-        raise = Math.max(Math.min(raise, 10), 0)
-        console.log(raise)
+        raise = Math.max(Math.min(raise, 10), 1)
         raise = Math.floor(raise * chips * .1)
-        console.log(raise)
         helpfulText.innerText = "Dealer raises " + raise + " call or fold?"
         foldButton.classList.remove('hidden')
         callButton.classList.remove('hidden')
@@ -621,35 +619,46 @@ const playerCard4 = document.getElementById('pc4')
 const playerCardsArray = [playerCard0, playerCard1, playerCard2, playerCard3, playerCard4]
 
 // Player Cards - functionality
+let playerCardSlideActive = false
 playerCard0.addEventListener('click', function(){
-    playersHand.cards[0].selected = !(playersHand.cards[0].selected)
-    playerCard0.classList.toggle('selected-card')
-    console.log(playersHand.cards[0].selected)
-    if (soundOn) {cardSelect.play()}
+    if (playerCardSlideActive) {
+        playersHand.cards[0].selected = !(playersHand.cards[0].selected)
+        playerCard0.classList.toggle('selected-card')
+        console.log(playersHand.cards[0].selected)
+        if (soundOn) {cardSelect.play()}
+    }
 })
 playerCard1.addEventListener('click', function(){
-    playersHand.cards[1].selected = !(playersHand.cards[1].selected)
-    playerCard1.classList.toggle('selected-card')
-    console.log(playersHand.cards[1].selected)
-    if (soundOn) {cardSelect.play()}
+    if (playerCardSlideActive) {
+        playersHand.cards[1].selected = !(playersHand.cards[1].selected)
+        playerCard1.classList.toggle('selected-card')
+        console.log(playersHand.cards[1].selected)
+        if (soundOn) {cardSelect.play()}
+    }
 })
 playerCard2.addEventListener('click', function(){
-    playersHand.cards[2].selected = !(playersHand.cards[2].selected)
-    playerCard2.classList.toggle('selected-card')
-    console.log(playersHand.cards[2].selected)
-    if (soundOn) {cardSelect.play()}
+    if (playerCardSlideActive) {
+        playersHand.cards[2].selected = !(playersHand.cards[2].selected)
+        playerCard2.classList.toggle('selected-card')
+        console.log(playersHand.cards[2].selected)
+        if (soundOn) {cardSelect.play()}
+    }
 })
 playerCard3.addEventListener('click', function(){
-    playersHand.cards[3].selected = !(playersHand.cards[3].selected)
-    playerCard3.classList.toggle('selected-card')
-    console.log(playersHand.cards[3].selected)
-    if (soundOn) {cardSelect.play()}
+    if (playerCardSlideActive) {
+        playersHand.cards[3].selected = !(playersHand.cards[3].selected)
+        playerCard3.classList.toggle('selected-card')
+        console.log(playersHand.cards[3].selected)
+        if (soundOn) {cardSelect.play()}
+    }
 })
 playerCard4.addEventListener('click', function(){
-    playersHand.cards[4].selected = !(playersHand.cards[4].selected)
-    playerCard4.classList.toggle('selected-card')
-    console.log(playersHand.cards[4].selected)
-    if (soundOn) {cardSelect.play()}
+    if (playerCardSlideActive) {
+        playersHand.cards[4].selected = !(playersHand.cards[4].selected)
+        playerCard4.classList.toggle('selected-card')
+        console.log(playersHand.cards[4].selected)
+        if (soundOn) {cardSelect.play()}
+    }
 })
 // for (i = 0; i < 5; i++) {
 //     playerCardsArray[i].addEventListener('click', function(){

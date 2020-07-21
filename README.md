@@ -1,8 +1,8 @@
 # Penguin Poker
 
-### Motivations and Process
+## Motivations and Process
 
-I built this because I wanted a challenge. We built a simple war (high card) game in class, so I felt fairly confident that I could build another card game. At the same time I wanted one which would push me to build some fairly complex functions, loops, and objects, to practice everything I had learned so far. While this game is heavier on Javascript, I felt it would be a good challenge for my CSS skills, a language I am little less confortable with than Javascript. 
+I built this because I wanted a challenge. This game formed my first project for the General Assembly Software Engineering immersive. It was completed in a week and when I made it I only had two weeks of experience with javascript. We built a simple war (high card) game in class, so I felt fairly confident that I could build another card game. At the same time I wanted one which would push me to build some fairly complex functions, loops, and objects, to practice everything I had learned so far. While this game is heavier on Javascript, I felt it would be a good challenge for my CSS skills, a language I am little less confortable with than Javascript. 
 
 To me, the core of this project was writing functions to take five cards and accurately describe them as a Poker hand, such as Three of a Kind, Straight, Full House etc. On a project such as this I generally dive in at the point of greatest complexity, so that was the first problem I chose to tackle. Before anything else though, I had to decide the basic data structures to be used. I settled on objects for the cards, each with attributes of suit, rank, and a name which would later be used to tie to an image file. These 52 cards were stored in a Deck array which, once shuffled, could supply to instances of a Hand class. The Hand class includes several different arrays which variously organized the cards for different purposes; many booleans, such as isFlush and isTwoPair, which are used to store information about the hand; and several functions to determine how these arrays are filled and which boolean(s) evaluate to true.
 
@@ -36,13 +36,13 @@ Here's what I came up with:
 
 Part of what makes this method elegant is that it uses the sortedCards array-- all five cards sorted from highest to lowest. I needed to create this array anyway for tie breaker situations, but I soon realized it would help me with a myriad of problems including this one. Since any cards of equal rank will be adjacent in the sortedCards array, I needed only to compare each card to the one before it to determine if it was a match. (I could have also compared to the one afterwards for the same effect.) The for loop begins with second card since the first card has no card before it to compare to. A boolean, inMatch tracks whether the method is actively within a match. If so, it only adds the current card to the matchesArray. If not, it adds the current card AND the previous. This is because the previous card is also part of the match but won't have been pushed to the matchesArray yet, since it is the very first card of the match. Lastly (second else if statement) if a card is NOT a match, but we are currently within an active match, the program recognises that the match is over. The completed matchArray is pushed to the allMatches array, which stores it along with any other matches. allMatches is an array which stores arrays. It will only ever have at most two elements, in the case of a Full House or Two Pair. From the lengths of the arrays within the all matches array we can determine the value of our hand: 2 for a pair; 3 for a three of a kind; 4 for a four od a kind; 2, 2 for Two Pair; 3, 2 for a Full House.
 
-### Developing the Dealer
+## Developing the Dealer
 
 You may have noticed in the above code another array I haven't mentioned yet -- inUseCards. It's filling with the same cards that get put in allMatches, but it stores them in only one level of structure. As the name suggests, inUseCards simply stores all the cards that are currently being used to create a certain hand. inUseCards helps to solve one of the more complicated problems of Penguin Poker: creating a "computer" or "dealer" player that actually plays poker intellegently.
 
-From the very first planning stages I graivitated towards the five card draw form of poker. The decision to discard certain cards and gt new ones gives the player an interesting choice, even in cases where there is no gambling involved. However, I quickly realized this created a problem: if the player can replace cards, the computer needs to be able to do so also, or the player would be greatly overpowered. 
+From the very first planning stages I gravitated towards the five card draw form of poker. The decision to discard certain cards and get new ones gives the player an interesting choice, even in cases where there is no gambling involved. However, I quickly realized this created a problem: if the player can replace cards, the computer needs to be able to do so also, or the player would be greatly overpowered. 
 
-To hhelp solve this issue I built the Hand class to be flexible, allowing it to take cards as input and just fill in the rest:
+To help solve this issue I built the Hand class to be flexible, allowing it to take cards as input and just fill in the rest:
 
     ```javascript
     this.cards = cards;
@@ -65,9 +65,24 @@ The player's new hand, by contrast, simply keeps the cards the player selected:
 
     playersHand = new Hand(playersHand.selectedCards)
 
+Once I solved these core problems, it was surprisingly easy to expand the game with new features, each exanding on the last. The biggest thing I learned from this project is to always think one step ahead when coding. Some of the features I added later in the week were surprisingly easy to implement because I had built previous to be flexible and to generate as much data as possible. One example of this is the betting system. I originally wanted to have two identical rounds of betting per hand. Once I started coding it however, I realized it would be more interesting to make the second hand involve an offer, or "raise", a situation which allowed me to expand the dealer. Here's how the raise is calculated:
 
+    raise = computersHand.handValue.value + 2
+    raise = raise + Math.floor(Math.random() * 5)
+    raise = Math.max(Math.min(raise, 10), 1)
+    raise = Math.floor(raise * chips * .1)
 
-### Original Proposal for Project
+The computer's handValue.value is a number from 0 (no hand/ high card) up to 8 (the rare straight flush). The second line randomly increases it to make it a little harder for the player to deduce to the exact hand of the dealer from their raise. The third line makes sure the raise has a value between 1 and 10. In the fourht line this number is translated into some percentage--between 10% and 100%--of the player's chips. The player's current chips is a factor so that later in the game as the player accumulates more and more they will still be challenged to place bets that could actually hurt them.
+
+## Future Directions
+
+If I continued work on this project, it would be in the area of improving its design. I think there is still work to do in making it look cleaner, and generally improve the look of the buttons and other page elements. I'd also considering adding some music options. I'd also like to add a favicon.
+
+For future games I'd like to try a game which uses a grid like sudoku, minesweeper, or tetris. Any of these games would build my skills in CSS as well as challenge me to do complex manipulation of data in javascript.
+
+I'd also like to do a story based game, perhaps with management elements. This would really push me to the next level in terms of design. 
+
+## Original Proposal for Project
 
 ##### MVP User story:
 
@@ -141,7 +156,7 @@ Steps 1-4 repeat.
 
 ##### Wireframe
 
-![Wireframe](./images/wireframe_poker.png)
+![Wireframe](./assets/images/wireframe_poker.png)
 
 
 
