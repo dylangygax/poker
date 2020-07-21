@@ -1,6 +1,75 @@
-# Poker: Five Card Draw
+# Penguin Poker
 
-MVP User story:
+### Motivations and Process
+
+I built this because I wanted a challenge. We built a simple war (high card) game in class, so I felt fairly confident that I could build another card game. At the same time I wanted one which would push me to build some fairly complex functions, loops, and objects, to practice everything I had learned so far. While this game is heavier on Javascript, I felt it would be a good challenge for my CSS skills, a language I am little less confortable with than Javascript. 
+
+To me, the core of this project was writing functions to take five cards and accurately describe them as a Poker hand, such as Three of a Kind, Straight, Full House etc. On a project such as this I generally dive in at the point of greatest complexity, so that was the first problem I chose to tackle. Before anything else though, I had to decide the basic data structures to be used. I settled on objects for the cards, each with attributes of suit, rank, and a name which would later be used to tie to an image file. These 52 cards were stored in a Deck array which, once shuffled, could supply to instances of a Hand class. The Hand class includes several different arrays which variously organized the cards for different purposes; many booleans, such as isFlush and isTwoPair, which are used to store information about the hand; and several functions to determine how these arrays are filled and which boolean(s) evaluate to true.
+
+One function in particular I'd like to highlight, is how I determined matches between the cards - Pairs, Three of a Kinds, Full Houses. I was very determined to get all this info with one function, but I was unsure initially how to do so. One early idea I had was to simply compare all five cards against all five cards and increment a counter variable with each match. While this technically would have worked, it felt a little sloppy. I wanted a method that would also store the cards in an array that I could access later.
+
+Here's what I came up with: 
+
+        ```javascript
+        this.allMatches = []
+        this.matchesArray = []
+        this.inMatch = false
+        for (i = 1; i < 5; i++) {
+            if (this.sortedCards[i].rank === this.sortedCards[i - 1].rank && this.inMatch === false) {
+                this.matchesArray.push(this.sortedCards[i], this.sortedCards[i - 1])
+                this.inUseCards.push(this.sortedCards[i], this.sortedCards[i - 1])
+                this.inMatch = true
+            } else if (this.sortedCards[i].rank === this.sortedCards[i - 1].rank && this.inMatch === true) {
+                this.matchesArray.push(this.sortedCards[i])
+                this.inUseCards.push(this.sortedCards[i])
+            } else if (this.sortedCards[i].rank !== this.sortedCards[i - 1].rank && this.inMatch === true) {
+                this.allMatches.push(this.matchesArray)
+                this.matchesArray = []
+                this.inMatch = false
+            }
+        }
+        // If matchesArray still has a little left (the case where the lowest card is part of a pair, three of a kind et cetera)
+        if (this.matchesArray.length > 0) {
+            this.allMatches.push(this.matchesArray)
+        }
+        ```
+
+Part of what makes this method elegant is that it uses the sortedCards array-- all five cards sorted from highest to lowest. I needed to create this array anyway for tie breaker situations, but I soon realized it would help me with a myriad of problems including this one. Since any cards of equal rank will be adjacent in the sortedCards array, I needed only to compare each card to the one before it to determine if it was a match. (I could have also compared to the one afterwards for the same effect.) The for loop begins with second card since the first card has no card before it to compare to. A boolean, inMatch tracks whether the method is actively within a match. If so, it only adds the current card to the matchesArray. If not, it adds the current card AND the previous. This is because the previous card is also part of the match but won't have been pushed to the matchesArray yet, since it is the very first card of the match. Lastly (second else if statement) if a card is NOT a match, but we are currently within an active match, the program recognises that the match is over. The completed matchArray is pushed to the allMatches array, which stores it along with any other matches. allMatches is an array which stores arrays. It will only ever have at most two elements, in the case of a Full House or Two Pair. From the lengths of the arrays within the all matches array we can determine the value of our hand: 2 for a pair; 3 for a three of a kind; 4 for a four od a kind; 2, 2 for Two Pair; 3, 2 for a Full House.
+
+### Developing the Dealer
+
+You may have noticed in the above code another array I haven't mentioned yet -- inUseCards. It's filling with the same cards that get put in allMatches, but it stores them in only one level of structure. As the name suggests, inUseCards simply stores all the cards that are currently being used to create a certain hand. inUseCards helps to solve one of the more complicated problems of Penguin Poker: creating a "computer" or "dealer" player that actually plays poker intellegently.
+
+From the very first planning stages I graivitated towards the five card draw form of poker. The decision to discard certain cards and gt new ones gives the player an interesting choice, even in cases where there is no gambling involved. However, I quickly realized this created a problem: if the player can replace cards, the computer needs to be able to do so also, or the player would be greatly overpowered. 
+
+To hhelp solve this issue I built the Hand class to be flexible, allowing it to take cards as input and just fill in the rest:
+
+    ```javascript
+    this.cards = cards;
+        this.numberOfCardsNeeded = 5 - this.cards.length;
+        for (i = 1; i <= this.numberOfCardsNeeded; i++) {
+            this.cards.push(deck.shift())
+        }
+    ```
+
+When each hand begins an instance of the Hand class is created for each of the players which takes no cards arguments and therefore grabs five from the shuffled deck. 
+
+    playersHand = new Hand ([])
+    computersHand = new Hand ([])
+
+When computer needs to replace cards it keeps the cards it already store in inUseCards and fills in the remaining cards from the deck:
+
+    computersHand = new Hand(computersHand.inUseCards)
+
+The player's new hand, by contrast, simply keeps the cards the player selected:
+
+    playersHand = new Hand(playersHand.selectedCards)
+
+
+
+### Original Proposal for Project
+
+##### MVP User story:
 
 0. User loads web page. 
     User has the option of a "Deal" button
@@ -34,7 +103,7 @@ Steps 1-4 repeat.
 
 
 
-Nice-To-Haves and stretch goals beyond MVP (in roughly the order I would pursue them):
+##### Nice-To-Haves and stretch goals beyond MVP (in roughly the order I would pursue them):
 
 1. A betting system. 
     The user begins with 1000 chips. 
@@ -70,14 +139,14 @@ Nice-To-Haves and stretch goals beyond MVP (in roughly the order I would pursue 
 
 
 
-Wireframe
+##### Wireframe
 
 ![Wireframe](./images/wireframe_poker.png)
 
 
 
 
-Behind the scenes
+##### Behind the scenes
 
 When the user hits "Deal!" the deck array will be shuffled. 
 The Hand class will take five card objects from the deck array to create an instance of the Hand class assigned to the playersHand variable

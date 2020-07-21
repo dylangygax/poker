@@ -11,22 +11,19 @@ let pot = 0
 
 // LEVEL
 
-let level = {number: 1, minChips: 100, name: 'Antarctica', upMessage: "Welcome back to Antarctica", downMessage: "Welcome back to Antarctica"}
-let nextLevel = {number: 2, minChips: 3000, name: 'Ocean', upMessage: "Congrats on tripling your chips! Enjoy a cool, relaxing swim in the Ocean", downMessage: "Going for another swim? Try to waddle back to dry land."}
 const levelSystem = [
     {number: 0, minChips: 0, name: 'bust', upMessage: "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table. Were you in hell?", downMessage: "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table."},
     {number: 1, minChips: 100, name: 'Antarctica', upMessage: "Welcome back to Antarctica. Were you in hell?", downMessage: "Welcome back to Antarctica"},
     {number: 2, minChips: 3000, name: 'Ocean', upMessage: "Congrats on tripling your chips! Enjoy a cool, relaxing swim in the Ocean", downMessage: "Going for another swim? Try to waddle back to dry land."},
     {number: 3, minChips: 10000, name: 'New Zealand', upMessage: "Welcome to New Zealand! Home to cute little blue penguins", downMessage: "You're back in New Zealand. Those penguins are cute, but you have mroe to explore"},
-    {number: 4, minChips: 25000, name: 'Chile', upMessage: "welcome to Chile", downMessage: "welcome BACK to Chile"},
-    {number: 5, minChips: 100000, name: 'Galapagos', upMessage: "welcome to the Galapagos", downMessage: "welcome BACK to the Galapagos"},
+    {number: 4, minChips: 25000, name: 'Chile', upMessage: "Macaroni, Magellanic, King, Southern Rockhopper... so many penguin possibilities", downMessage: "Forge on. Go where no penguin has gone before!"},
+    {number: 5, minChips: 100000, name: 'Galapagos', upMessage: "Welcome to the Galapagos, the most equitorial or penguin habitats!", downMessage: "Welcome BACK to the Galapagos"},
     {number: 6, minChips: 1000000, name: 'Lunar',  upMessage: "Space, the final frontier... for penguins", downMessage: "You've returned from some strange place"},
 ]
+let level = levelSystem[1]
+let nextLevel = levelSystem[2]
 
 // HAND
-
-//let playersHand = new Hand ([{suit: "S", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 10, name: "H10", sorted: false}, {suit: "S", rank: 9, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
-//let computersHand = new Hand ([{suit: "H", rank: 14, name: "H10", sorted: false}, {suit: "C", rank: 12, name: "H10", sorted: false}, {suit: "H", rank: 13, name: "H10", sorted: false}, {suit: "S", rank: 11, name: "H10", sorted: false}, {suit: "H", rank: 7, name: "H10", sorted: false}])
 
 class Hand {
     constructor(cards){
@@ -66,13 +63,14 @@ class Hand {
             }
         }
         // console.log(this.sortedCards)
+
         // Matches Check. Fills allMatches with arrays containing arrays of cards with matching suits. 
         // Fills inUseCards with all cards that match at least one other card. 
         // allMatches and inUseCards have the same cards but stored in two levels and one level of structure respectively
         this.allMatches = []
         this.matchesArray = []
         this.inMatch = false
-        for (i = 1; i < 5; i++) {
+        for (i = 1; i < 5; i++) {  
             if (this.sortedCards[i].rank === this.sortedCards[i - 1].rank && this.inMatch === false) {
                 this.matchesArray.push(this.sortedCards[i], this.sortedCards[i - 1])
                 this.inUseCards.push(this.sortedCards[i], this.sortedCards[i - 1])
@@ -90,6 +88,7 @@ class Hand {
         if (this.matchesArray.length > 0) {
             this.allMatches.push(this.matchesArray)
         }
+
         // Uses allMatches to determine the type of hand, for all hand types that are based on matching card ranks
         if (this.allMatches.length === 1) {
             // Four of a Kind
@@ -143,6 +142,7 @@ class Hand {
                 }
             }
         }
+
         // Straight Check
         this.straightCounter = 0
         for (i = 0; i <= 3; i++) {
@@ -155,7 +155,7 @@ class Hand {
         }
         // Almost Straight check. Only tests for the case where you have four in a row, not when you are missing a card in the center ("gutshot"). 
         // This is intentional, as the chances of winning a gutshot are much lower (about half) than the case where you can add a card on top or bottom
-        if (this.inUseCards.length === 0 && this.straightCounter === 3) { // inAlmostFlush takes priority since it's a higher hand and more likely 
+        if (this.inUseCards.length === 0 && this.straightCounter === 3) { 
             this.isAlmostStraight = true
             // sets this.inUseCards to include the four cards that are in a row
             this.inUseCards = [...this.sortedCards] // S P R E A D
@@ -203,7 +203,7 @@ class Hand {
         else if (this.isPair) {
             this.handValue = {value: 1, name: "Pair"}
         }
-        // Creating a more specific display name for handValue basedo n the highest card
+        // Creating a more specific display name for handValue based on the highest card
         if (this.handValue.value === 0) {
             if (this.sortedCards[0].rank <= 10) {
                 this.handValue.name = this.sortedCards[0].rank + " High"
@@ -264,24 +264,10 @@ getDeck = () => {
         }
         deck = shuffledDeck
 }
-//getDeck()
-//console.log(deck)
-
-
 
 //////////////////////////// Display functions
 
 const unHideCards = () => {
-    // playerCard0.classList.remove('hidden')
-    // playerCard1.classList.remove('hidden')
-    // playerCard2.classList.remove('hidden')
-    // playerCard3.classList.remove('hidden')
-    // playerCard4.classList.remove('hidden')
-    // computerCard0.classList.remove('hidden')
-    // computerCard1.classList.remove('hidden')
-    // computerCard2.classList.remove('hidden')
-    // computerCard3.classList.remove('hidden')
-    // computerCard4.classList.remove('hidden')
     for (i = 0; i < 5; i++) {
         playerCardsArray[i].classList.remove('hidden')
         computerCardArray[i].classList.remove('hidden')
@@ -289,27 +275,12 @@ const unHideCards = () => {
 }
 
 const showPlayersCards = () => {
-    // playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.cards[0].name)
-    // playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.cards[1].name)
-    // playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.cards[2].name)
-    // playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.cards[3].name)
-    // playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.cards[4].name)
     for (i = 0; i < 5; i++) {
         playerCardsArray[i].setAttribute('src', 'assets/images/cards/' + playersHand.cards[i].name)
     }
 }
 
 const showPlayersCardsAtEnd = () => {
-    // playerCard0.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[0].name)
-    // playerCard1.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[1].name)
-    // playerCard2.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[2].name)
-    // playerCard3.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[3].name)
-    // playerCard4.setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[4].name)
-    // playerCard0.classList.remove('selected-card')
-    // playerCard1.classList.remove('selected-card')
-    // playerCard2.classList.remove('selected-card')
-    // playerCard3.classList.remove('selected-card')
-    // playerCard4.classList.remove('selected-card')
     for (i = 0; i < 5; i++) {
         playerCardsArray[i].setAttribute('src', 'assets/images/cards/' + playersHand.organizedCards[i].name)
         playerCardsArray[i].classList.remove('selected-card')
@@ -317,29 +288,19 @@ const showPlayersCardsAtEnd = () => {
 }
 
 const showComputerCards = () => {
-    // computerCard0.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[0].name)
-    // computerCard1.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[1].name)
-    // computerCard2.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[2].name)
-    // computerCard3.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[3].name)
-    // computerCard4.setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[4].name)
     for (i = 0; i < 5; i++) {
         computerCardArray[i].setAttribute('src', 'assets/images/cards/' + computersHand.organizedCards[i].name)
     }
 }
 
 const showBacksOfComputerCards = () => {
-    // computerCard0.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    // computerCard1.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    // computerCard2.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    // computerCard3.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
-    // computerCard4.setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
     for (i = 0; i < 5; i++) {
         computerCardArray[i].setAttribute('src', 'assets/images/cards/backs/penguin-cute.svg')
     }
 }
 
 
-/////////////////////////////// Functional functions
+/////////////////////////////// Gameplay functions
 
 const deal = () => {
     getDeck()
@@ -352,11 +313,8 @@ const deal = () => {
     console.log(computersHand.handValue)
     console.log(computersHand.inUseCards)
     console.log(getWinner())
-    // DOM: top of screen displays 5 face down cards (opactity 0 -> 1). 
-    // Bottom screen displays the players cards. Deal button disapears. 
     showPlayersCards()
     showBacksOfComputerCards()
-    //     "Deal cards" and "Keep cards" appear. 
     winnerText.innerText = ""
     playersHandText.innerText = ""
     computersHandText.innerText = ""
@@ -365,7 +323,6 @@ const deal = () => {
     wagerBox.classList.remove('hidden')
     drawCardButton.classList.remove('hidden')
     holdCardButton.classList.remove('hidden')
-    // foldButton.classList.remove('hidden')
     dealButtonActive = false
     if (soundOn) {
         cardDealt.play()
@@ -421,23 +378,17 @@ const manuallyReplaceCards = () => {
 }
 
 const dealerReplacesCardsAnimation = () => {
-    // computerCard0.classList.add('computers-discard')
-    // console.log("SLIDIN!")
-    // console.log(computerCard0)
-    // setTimeout(() => {computerCard0.classList.remove('computers-discard')}, 500)
     console.log(computersHand.cards)
     for (i = 0; i < 5; i++) {
         if (!computersHand.inUseCards.includes(computersHand.cards[i])) {
             console.log('my log say something' + i)
             computerCardArray[i].classList.add('computers-discard')
-            //setTimeout(() => {computerCard0.classList.remove('computers-discard')}, 500)
         }
     }
     setTimeout(() => {
         for (i = 0; i < 5; i++) {
-            //if (!computersHand.inUseCards.includes(computersHand.cards[i])) {
-                computerCardArray[i].classList.remove('computers-discard')}
-            //}
+                computerCardArray[i].classList.remove('computers-discard')
+        }
     } , 1000)
     setTimeout((console.log("waitin")), 300)
 }
@@ -621,7 +572,6 @@ const wagerBox = document.getElementById('wager-box')
 // Draw Cards Button
 const drawCardButton = document.getElementById('draw-cards')
 drawCardButton.addEventListener('click', function(){
-    //console.log("yeet 2049")
     if (checkSelected()) {
         if (getWager() === true) {
             manuallyReplaceCards()
@@ -638,8 +588,6 @@ drawCardButton.addEventListener('click', function(){
 // Hold Cards Button
 const holdCardButton = document.getElementById('hold-cards')
 holdCardButton.addEventListener('click', function(){
-    //console.log("yeet 2049")
-    //getWager()
     if (getWager() === true) {
         showPlayersCardsAtEnd()
         autoReplaceCards()
@@ -770,33 +718,3 @@ const lossSound = new Audio('assets/audio/effects/423012__orangemcmuffin__failur
 const newLevel = new Audio('assets/audio/effects/439889__simonbay__lushlife-levelup.wav')
 const mistakeSound = new Audio('assets/audio/effects/483598__raclure__wrong.mp3')
 
-/* 
-TO DO Thursday night:
-    reorganize code according to the list above this to do list. look to clean things up and use ... where needed X
-    impliment calling or not of computer's wager X
-    and use of hidden class X
-    IF FIRST TWO AREN'T DONE IN THE MORNING, START HERE ANYWAY:
-    Penguins! penguin background and penguin backs for the cards X
-    sounds
-    create options menu and menus for sound and background (with two themes)
-    animations for cards entering leaving hand (especially Dealer's hand)
-    mobile responsive design
-    bust screen for when chips drops below 100/ unlocking system X
-
-    debug: check spreads X
-
-    After lunch:
-    3. sounds X
-    2. fonts
-    4. create options menu and menus for sound and background (with two themes) meh ---- JUST FOR SOUND!
-    1. animations for cards entering leaving Dealer's hand X
-    5. mobile responsive design
-
-    
-
-    display fonts
-    CSS button styles
-
-    sounds needed: level up X, alert! X
-
-*/
