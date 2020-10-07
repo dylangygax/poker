@@ -1,7 +1,3 @@
-////////////////////////////////////////// PENGUIN POKER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-////////////////////////// GLOBAL VARIABLES, CLASSES, AND OBJECTS
-
 // CHIPS
 
 let chips = 1000
@@ -62,7 +58,6 @@ class Hand {
                 }
             }
         }
-        // console.log(this.sortedCards)
 
         // Matches Check. Fills allMatches with arrays containing arrays of cards with matching suits. 
         // Fills inUseCards with all cards that match at least one other card. 
@@ -158,7 +153,7 @@ class Hand {
         if (this.inUseCards.length === 0 && this.straightCounter === 3) { 
             this.isAlmostStraight = true
             // sets this.inUseCards to include the four cards that are in a row
-            this.inUseCards = [...this.sortedCards] // S P R E A D
+            this.inUseCards = [...this.sortedCards] 
             // case where low card is not in straight
             if (this.inUseCards[3].rank !== this.inUseCards[4].rank + 1) {
                 this.inUseCards.pop()
@@ -228,14 +223,12 @@ class Hand {
         }
 
         // Organized Cards: for displaying what player and computer has at the end of each round. 
-        this.organizedCards = [...this.inUseCards] // S P R E A D
+        this.organizedCards = [...this.inUseCards] 
         for (i = 0; i < 5; i++){
             if (!this.organizedCards.includes(this.sortedCards[i])) {
                 this.organizedCards.push(this.sortedCards[i])
             }
         }
-        // console.log(this.sortedCards)
-        // console.log(this.inUseCards)
     }
 }
 
@@ -262,7 +255,7 @@ getDeck = () => {
                 }
             }
         }
-        deck = shuffledDeck
+    deck = shuffledDeck
 }
 
 //////////////////////////// Display functions
@@ -308,12 +301,6 @@ const deal = () => {
     playersHand = new Hand ([])
     computersHand = new Hand ([])
     unHideCards()
-    console.log(playersHand.sortedCards)
-    console.log(playersHand.handValue)
-    console.log(computersHand.sortedCards)
-    console.log(computersHand.handValue)
-    console.log(computersHand.inUseCards)
-    console.log(getWinner())
     showPlayersCards()
     playerCardSlideActive = true
     showBacksOfComputerCards()
@@ -332,7 +319,6 @@ const deal = () => {
 }
 
 const checkSelected = () => {
-    console.log(playersHand.cards)
     for (i = 0; i < 5; i++) {
         if (playersHand.cards[i].selected === true) {
             return true
@@ -343,12 +329,9 @@ const checkSelected = () => {
 
 const getWager = () => {
     wager = parseInt(document.getElementById('wager-box').value)
-    console.log(wager)
     if (99 < wager && wager <= chips) {
         pot = wager * 2
-        console.log(pot)
         chips = chips - parseInt(wager)
-        console.log(chips)
         chipsCounter.innerText = "Chips: " + chips
         potCounter.innerText = "Pot: " + pot
         return true
@@ -362,7 +345,7 @@ const getWager = () => {
         return false
     } else {
         if (soundOn) {mistakeSound.play()}
-        ahelpfulText.innerText = "I'm not sure I understand. Please place a bet of at least 100 chips, but no more than you currently have"
+        helpfulText.innerText = "I'm not sure I understand. Please place a bet of at least 100 chips, but no more than you currently have"
         return false
     } 
 }
@@ -380,10 +363,8 @@ const manuallyReplaceCards = () => {
 }
 
 const dealerReplacesCardsAnimation = () => {
-    console.log(computersHand.cards)
     for (i = 0; i < 5; i++) {
         if (!computersHand.inUseCards.includes(computersHand.cards[i])) {
-            console.log('my log say something' + i)
             computerCardArray[i].classList.add('computers-discard')
         }
     }
@@ -392,7 +373,7 @@ const dealerReplacesCardsAnimation = () => {
                 computerCardArray[i].classList.remove('computers-discard')
         }
     } , 1000)
-    setTimeout((console.log("waitin")), 300)
+    //setTimeout((console.log("waitin")), 300)
 }
 
 const autoReplaceCards = () => {
@@ -400,9 +381,6 @@ const autoReplaceCards = () => {
         dealerReplacesCardsAnimation()
         computersHand = new Hand(computersHand.inUseCards)
     }
-    console.log("replace haha")
-    console.log(computersHand.sortedCards)
-    console.log(computersHand.handValue)
 }
 
 const getRaise = () => {
@@ -454,8 +432,7 @@ const getWinner = () => {
                 return "win"
             } else if (playersHand.sortedCards[i].rank < computersHand.sortedCards[i].rank) {
                 return "loss"
-            }
-            console.log(i + " checked")            
+            }           
         }
         return "win"//this is the case where both players have the exact same value cards. I give the tie breaker to the player. Seems like a nice thing to do. In practice this will really never run
 
@@ -464,16 +441,12 @@ const getWinner = () => {
 
 const checkForLevel = () => {
     let tempLevel = level
-    console.log(level)
-    console.log(tempLevel)
     for (i = 0; i <= 6; i++) {
         if (chips >= levelSystem[i].minChips) {
             level = levelSystem[i]
             nextLevel = levelSystem[i + 1]
         }
     }
-    console.log(level)
-    console.log(tempLevel)
     if (chips < 100) {
         helpfulText.innerText = "You're bust! Monseiur Pengeaux requires you to have 100 chips to remain at the table."
         resetButton.classList.remove('hidden')
@@ -496,7 +469,6 @@ const checkForLevel = () => {
 
 const displayFinalInfo = () => {
     playersHandText.innerText = playersHand.handValue.name
-    console.log(playersHand.handValue.name)
     computersHandText.innerText = computersHand.handValue.name
     helpfulText.innerText = 'Click the deck to deal another hand!'
     showComputerCards()
@@ -517,7 +489,6 @@ const displayFinalInfo = () => {
 const finishRound = () => {
     if (getWinner() === "win") {
         winnerText.innerText = "You win!!"
-        console.log("YOU WIN!!")
         chips = chips + pot
         if (soundOn) {
             winSound.play()
@@ -525,7 +496,6 @@ const finishRound = () => {
     }
     if (getWinner() === "loss") {
         winnerText.innerText = "You lose!!"
-        console.log("YOU LOSE!!")
         if (soundOn) {
             lossSound.play()
         }
@@ -558,7 +528,6 @@ resetButton.addEventListener('click', function(){
 const dealButton = document.querySelector('.deck-card')
 dealButton.addEventListener('click', function(){
     if (dealButtonActive === true) {
-        console.log("yeet")
         deal()
     }
 })
@@ -593,7 +562,7 @@ holdCardButton.addEventListener('click', function(){
     }
 })
 
-// Fold Button 2
+// Fold Button
 const foldButton = document.getElementById('fold')
 foldButton.addEventListener('click', function(){
     fold()
@@ -624,7 +593,6 @@ playerCard0.addEventListener('click', function(){
     if (playerCardSlideActive) {
         playersHand.cards[0].selected = !(playersHand.cards[0].selected)
         playerCard0.classList.toggle('selected-card')
-        console.log(playersHand.cards[0].selected)
         if (soundOn) {cardSelect.play()}
     }
 })
@@ -632,7 +600,6 @@ playerCard1.addEventListener('click', function(){
     if (playerCardSlideActive) {
         playersHand.cards[1].selected = !(playersHand.cards[1].selected)
         playerCard1.classList.toggle('selected-card')
-        console.log(playersHand.cards[1].selected)
         if (soundOn) {cardSelect.play()}
     }
 })
@@ -640,7 +607,6 @@ playerCard2.addEventListener('click', function(){
     if (playerCardSlideActive) {
         playersHand.cards[2].selected = !(playersHand.cards[2].selected)
         playerCard2.classList.toggle('selected-card')
-        console.log(playersHand.cards[2].selected)
         if (soundOn) {cardSelect.play()}
     }
 })
@@ -648,7 +614,6 @@ playerCard3.addEventListener('click', function(){
     if (playerCardSlideActive) {
         playersHand.cards[3].selected = !(playersHand.cards[3].selected)
         playerCard3.classList.toggle('selected-card')
-        console.log(playersHand.cards[3].selected)
         if (soundOn) {cardSelect.play()}
     }
 })
@@ -656,7 +621,6 @@ playerCard4.addEventListener('click', function(){
     if (playerCardSlideActive) {
         playersHand.cards[4].selected = !(playersHand.cards[4].selected)
         playerCard4.classList.toggle('selected-card')
-        console.log(playersHand.cards[4].selected)
         if (soundOn) {cardSelect.play()}
     }
 })
@@ -664,7 +628,6 @@ playerCard4.addEventListener('click', function(){
 //     playerCardsArray[i].addEventListener('click', function(){
 //         playersHand.cards[i].selected = !(playersHand.cards[i].selected)
 //         playerCard4.classList.toggle('selected-card')
-//         console.log(playersHand.cards[i].selected)
 //         cardSelect.play()
 //     })
 // }
@@ -676,7 +639,6 @@ const computerCard2 = document.getElementById('cc2')
 const computerCard3 = document.getElementById('cc3')
 const computerCard4 = document.getElementById('cc4')
 const computerCardArray = [computerCard0, computerCard1, computerCard2, computerCard3, computerCard4]
-console.log(computerCardArray[2])
 
 // Winner text
 const winnerText = document.getElementById('winner-text')
@@ -696,7 +658,6 @@ const computersOffer = document.getElementById('computers-raise')
 // Call Button
 const callButton = document.getElementById('call')
 callButton.addEventListener('click', function(){
-    console.log("call button pressed")
     chips = chips - raise
     pot = pot + (raise * 2)
     chipsCounter.innerText = "Chips: " + chips
@@ -714,7 +675,6 @@ muteButton.addEventListener('click', function() {
         muteButton.innerText = 'mute'
     }
     soundOn = !soundOn
-    console.log(soundOn)
 })
 
 //////////////////////////////// SOUND
